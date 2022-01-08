@@ -1,6 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {View, StyleSheet, StatusBar} from 'react-native';
-
+import colors from '../../assets/colors/colors';
 
 import PageHome from '../guildPages/pageHome';
 import PageNew from '../guildPages/pageNew';
@@ -23,7 +23,7 @@ const GuildTab = (props) => {
             <Tab.Screen name="Home" children={()=><PageHome position={props.position}/>} options={homeoptions}/>
             <Tab.Screen name="New" children={()=><PageNew position={props.position}/>} options={newoptions}/>
             <Tab.Screen name="Quest" children={()=><PageQuest position={props.position}/>} options={questoptions}/>
-            <Tab.Screen name="My" children={()=><PageMy position={props.position}/>} options={myoptions}/>
+            <Tab.Screen name="My" children={()=><PageMy position={props.position} userToken={props.userToken}/>} options={myoptions}/>
         </Tab.Navigator>
     );
 };
@@ -46,9 +46,14 @@ const styles = StyleSheet.create({
 
 const navoptions = {
     headerShown : false,
-    tabBarActiveTintColor : '#333333',
-    tabBarInactiveTintColor : '#dddddd',
-    tabBarShowLabel : false
+    tabBarActiveTintColor : colors.blue,
+    tabBarInactiveTintColor : colors.cool_white,
+    tabBarShowLabel : false,
+    tabBarStyle : {
+        height : '10%',
+        elevation : 0,
+        borderTopWidth : 0
+    }
 };
 
 const homeoptions = {

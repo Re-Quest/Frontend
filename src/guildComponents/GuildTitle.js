@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import ImgTeam from '../../assets/images/img_team1.png';
+import ImgTeam from '../../assets/images/img_dolphin.png';
 import {Picker} from '@react-native-picker/picker';
 import colors from '../../assets/colors/colors';
 import * as Font from 'expo-font';
@@ -69,7 +69,6 @@ const GuildTitle = (props) => {
                             })
                         }
                     </Picker>
-                    
                 </View >
             
             </View>
@@ -98,12 +97,13 @@ const styles = StyleSheet.create({
         width : 30,
         height : 30,
         borderRadius : 15,
-        margin : 10
+        margin : 10,
+        backgroundColor : colors.white
     },
     guildName : {
         marginRight : 25,
         fontFamily : 'ReadexPro-Bold',
-        fontSize : 23
+        fontSize : 20
     },
     picker : {
         position : 'absolute',
