@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import Img from '../../assets/images/img_shark.png';
+import Img from '../../assets/images/img_5.png';
 import colors from '../../assets/colors/colors';
 import React, {useState, useEffect} from 'react';
 import * as Font from 'expo-font';
@@ -28,7 +28,7 @@ const QuestView = () => {
      // Data
 
     const taskName = "[ Main Tab Icon File Please! ]";
-    const lastHolder = "DESIGNER";
+    const lastHolder = "EUN-HO";
     const currHolder = "ME";
     const comment = "Thank you"
     const date = "01-08-FRI 5PM";
@@ -91,12 +91,21 @@ export default QuestView;
 const styles = StyleSheet.create({
     questWrapper : {
         backgroundColor : colors.white,
-        width : '100%',
+        width : '90%',
         height : 140,
         borderRadius : 20,
         paddingVertical : 15,
         paddingHorizontal : 20,
-        marginVertical : 10,
+        marginVertical : 15,
+
+        shadowColor : colors.light_gray,
+        shadowOffset : {
+            width : 1,
+            height : 1
+        },
+        shadowOpacity : 1,
+        shadowRadius : 10,
+        elevation : 7
     },
     mainWrapper : {
         flexDirection : 'row',

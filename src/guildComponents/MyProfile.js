@@ -2,9 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native';
 import * as Font from 'expo-font';
 
-import Imgp1 from '../../assets/images/img_bug.png';
 import colors from '../../assets/colors/colors';
-import { useLinkProps } from '@react-navigation/native';
 
 const MyProfile = (props) =>{
 
@@ -24,38 +22,53 @@ const MyProfile = (props) =>{
     },[]);
 
     // Data
-    const profileInfo = {
-        "name" : "Hye1ee",
-        "position" : "student",
-        "email" : "hyewon0809@kaist.ac.kr",
-        "phone" : "010-9021-0167",
-        "teams" : ["CLASSA", "TEAM1","TEAM3","CLASSB"]
+    const data = props.userToken;
+    const img = 0;
+    let check = "../../assets/images/img_"+img+".png";
+    const url = "../../assets/images/img_0.png"
+
+    const test = () =>{
+        console.log(typeof(img));
+        console.log("hi"+img+"hi");
+
     };
+    
+    
+
+        /*
+    "email": "hyewon0809@kaist.ac.kr",
+    "guildInfo": Array [],
+    "phone": "010-9021-0167",
+    "profileImg": 0,
+    "teamInfo": Array [],
+    "userId": "hyewon",
+    "username": "HyewonLee",
+    */
 
     if(isReady){
         return(
             <View style={styles.profileWrapper}>
-                <Image style={styles.profileImg} source={Imgp1}/>
+                <Image style={styles.profileImg} source={require(check)}/>
                 <View style={styles.textWrapper}>
 
                     <View style={styles.maintxtWrapper}>
                         <View style={styles.textlineWrapper}>
-                            <Text style={styles.titletxt}>{props.userToken.toUpperCase()}</Text>
-                            <TouchableOpacity style={styles.editWrapper}>
+                            <Text style={styles.titletxt}>{data.userId.toUpperCase()}</Text>
+                            <TouchableOpacity style={styles.editWrapper} onPress={()=>test()}>
                                 <Text style={styles.edittxt}>Edit</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.titlemid}>{profileInfo.position.toUpperCase()}</Text>
+                        <Text style={styles.titlemid}>{data.guildInfo[0].posInGuild.toUpperCase()}</Text>
                     </View>
                     
                     <View style={styles.subtxtWrapper}>
-                        <Text style={styles.titlesub}>{profileInfo.email}</Text>
-                        <Text style={styles.titlesub}>{profileInfo.phone}</Text>
+                        <Text style={styles.titlesub}>{data.email}</Text>
+                        <Text style={styles.titlesub}>{data.phone}</Text>
                     </View>
 
                     <View style={styles.teamsWrapper}>
                         <ScrollView style={styles.scrollview} horizontal={true} pagingEnabled={true} >
-                            {profileInfo.teams.map((val, idx)=>{
+                            {data.teamInfo.map((val, idx)=>{
                                 return(
                                     <View style={styles.teamItemWrapper} key={idx}>
                                         <Text style={styles.teamItemName}>{val}</Text>
@@ -81,7 +94,7 @@ const styles = StyleSheet.create({
         height : 150,
         flexDirection : 'row',
         borderRadius : 20,
-        backgroundColor : colors.cool_white,
+        backgroundColor : colors.white,
         justifyContent : 'flex-start',
         alignItems : 'center',
 
@@ -93,7 +106,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity : 1,
         shadowRadius : 20,
-        elevation : 20
+        elevation : 10
     },
     profileImg : {
         width : 100,

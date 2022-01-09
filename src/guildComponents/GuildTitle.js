@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import ImgTeam from '../../assets/images/img_dolphin.png';
+import ImgTeam from '../../assets/images/img_7.png';
 import {Picker} from '@react-native-picker/picker';
 import colors from '../../assets/colors/colors';
 import * as Font from 'expo-font';
+import { color } from 'react-native-reanimated';
 
 const GuildTitle = (props) => {
 
@@ -28,7 +29,7 @@ const GuildTitle = (props) => {
     const setPosition = props.setPosition;
 
     // Data
-    const guildName = 'RN_PROJECT'
+    const guildName = 'react-study'
     const teamName = 'TEAM2'
     const teamList = ['TEAM1','TEAM2','TEAM3']
 
@@ -52,7 +53,7 @@ const GuildTitle = (props) => {
             <View style={styles.titleWrapper}>
                 <TouchableOpacity style={styles.guildWrapper} onPress={()=>expandWrapper()} activeOpacity={1}>
                     <Image style={styles.guildLogo} source={ImgTeam} />
-                    <Text style={styles.guildName}>{guildName}</Text>
+                    <Text style={styles.guildName}>{guildName.toUpperCase()}</Text>
                 </TouchableOpacity>
 
                 <View>
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
         marginHorizontal : '5%',
         alignItems : 'center',
         flexDirection : 'row',
+
     },
     guildWrapper : {
         height : 50,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
         justifyContent : 'flex-start',
         alignItems : 'center',
-        backgroundColor : colors.cool_white
+        backgroundColor : colors.white
     },
     guildLogo : {
         width : 30,

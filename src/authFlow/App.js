@@ -11,7 +11,6 @@ const App = (props) => {
 
   return (
     <View style={styles.fullscreen}>
-      <GuildTitle style={styles.header} position={position} setPosition={setPosition}/>
       <View style={styles.contents}>
           <GuildTab position={position} userToken={props.userToken}/>
       </View>
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
     marginTop : StatusBar.currentHeight,
   },
   contents : {
-    height : '90%'
+    height : '100%'
   }
 
 });
