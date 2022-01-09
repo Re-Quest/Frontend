@@ -7,6 +7,7 @@ import SignNavigator from './src/authFlow/SignNavigator';
 
 const App = () => {
 
+
   const [userToken, setUserToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
