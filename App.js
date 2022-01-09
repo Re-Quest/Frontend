@@ -1,28 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import {QuestModal} from "./src/components/QuestModal";
-import {useState} from "react";
-import {TouchableOpacity} from "react-native";
+import React, {useRef, useState} from 'react';
+import { StyleSheet, Text, View, StatusBar} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import AppScreen from './src/authFlow/App'; 
+import Splash from './src/authFlow/Splash'; 
+import SignNavigator from './src/authFlow/SignNavigator'; 
 
-export default function App() {
-  const [showQuest, setShowQuest] = useState(false);
+const App = () => {
 
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <TouchableOpacity onPress={() => setShowQuest(!showQuest)}>
-        <Text>QuestModal</Text>
-      </TouchableOpacity>
-      <QuestModal showQuest={showQuest} setShowQuest={setShowQuest}/>
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  const [userToken, setUserToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  if(isLoading){
+    return(<Splash />);
+  }else{
+      return(
+    <NavigationContainer>
+      {userToken===null?
+        <SignNavigator setUserToken={setUserToken} />: <AppScreen userToken={userToken}/>
+      }
+    </NavigationContainer>);
+  }
+
+};
+
+
+export default App;
