@@ -38,12 +38,21 @@ const SignIn = (props) => {
             if(res.status == 401){
                 props.setUserToken(null);
             }else{
-                props.setUserToken(res.data.username);
-                console.log(res.data.username);
+                let data = res.data;
+                data.teamInfo = ['CLASSA','CLASSB','FRONTEND','DESIGNER'];
+                data.guildInfo = [{
+                    guildId : 'madcamp',
+                    posInGuild : 'student'
+                }];
+                props.setUserToken(data);
             }
 
         });
     };
+
+
+
+
 
     if(isReady){
         return(

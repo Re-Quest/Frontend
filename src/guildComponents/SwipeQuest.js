@@ -46,8 +46,8 @@ const ScrollQuest = (props) => {
                     <Text>{`Scroll1 ${props.position}`}</Text>
                     <QuestView />
                 </View>
-                <View style={{width : '90%', height : '100%',marginHorizontal:'5%', backgroundColor : colors.cool_white}}>
-                    <ScrollView style={styles.scrollview} horizontal={false} >
+                <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
+                    <ScrollView contentContainerStyle={{alignItems:'center'}} horizontal={false} overScrollMode="never">
                         <QuestView />
                         <QuestView />
                         <QuestView />

@@ -3,7 +3,6 @@ import {View, StyleSheet, StatusBar} from 'react-native';
 import colors from '../../assets/colors/colors';
 
 import PageHome from '../guildPages/pageHome';
-import PageNew from '../guildPages/pageNew';
 import PageQuest from '../guildPages/pageQuest';
 import PageMy from '../guildPages/pageMy';
 
@@ -11,18 +10,28 @@ import IconHome from '../../assets/icons/icon_home.svg';
 import IconNew from '../../assets/icons/icon_new.svg';
 import IconQuest from '../../assets/icons/icon_quest.svg';
 import IconMy from '../../assets/icons/icon_my.svg';
+import QuestNavigator from '../guildPages/questNavigator';
 
 
 const Tab = createBottomTabNavigator();
 
 
 const GuildTab = (props) => {
+    /*
+    "email": "hyewon0809@kaist.ac.kr",
+    "guildInfo": Array [],
+    "phone": "010-9021-0167",
+    "profileImg": 0,
+    "teamInfo": Array [],
+    "userId": "hyewon",
+    "username": "HyewonLee",
+    */
 
     return(
         <Tab.Navigator style={styles.component} screenOptions={navoptions}>
-            <Tab.Screen name="Home" children={()=><PageHome position={props.position}/>} options={homeoptions}/>
-            <Tab.Screen name="New" children={()=><PageNew position={props.position}/>} options={newoptions}/>
-            <Tab.Screen name="Quest" children={()=><PageQuest position={props.position}/>} options={questoptions}/>
+            <Tab.Screen name="Home" children={()=><PageHome position={props.position} userToken={props.userToken}/>} options={homeoptions}/>
+            <Tab.Screen name="New" children={()=><QuestNavigator position={props.position} userToken={props.userToken}/>} options={newoptions}/>
+            <Tab.Screen name="Quest" children={()=><PageQuest position={props.position} userToken={props.userToken}/>} options={questoptions}/>
             <Tab.Screen name="My" children={()=><PageMy position={props.position} userToken={props.userToken}/>} options={myoptions}/>
         </Tab.Navigator>
     );
@@ -51,9 +60,12 @@ const navoptions = {
     tabBarShowLabel : false,
     tabBarStyle : {
         height : '10%',
-        elevation : 0,
+        elevation : 25,
         borderTopWidth : 0
-    }
+    },
+    position : 'absolute'
+    
+    
 };
 
 const homeoptions = {
