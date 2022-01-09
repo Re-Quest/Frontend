@@ -8,9 +8,8 @@ const pageMy = (props) => {
 
     return(
         <View style={styles.mypage}>
-            <MyProfile />
-            <Text>{`This is ${props.position} mypage`}</Text>
-            <ScrollQuest />
+            <MyProfile userToken={props.userToken}/>
+            <ScrollQuest position={props.position}/>
         </View>
     );
 

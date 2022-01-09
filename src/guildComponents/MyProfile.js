@@ -2,10 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native';
 import * as Font from 'expo-font';
 
-import Imgp1 from '../../assets/images/img_person3.png';
+import Imgp1 from '../../assets/images/img_bug.png';
 import colors from '../../assets/colors/colors';
+import { useLinkProps } from '@react-navigation/native';
 
-const MyProfile = () =>{
+const MyProfile = (props) =>{
 
     // Font loading
     const [isReady, setIsReady] = useState(false);
@@ -39,7 +40,7 @@ const MyProfile = () =>{
 
                     <View style={styles.maintxtWrapper}>
                         <View style={styles.textlineWrapper}>
-                            <Text style={styles.titletxt}>{profileInfo.name}</Text>
+                            <Text style={styles.titletxt}>{props.userToken.toUpperCase()}</Text>
                             <TouchableOpacity style={styles.editWrapper}>
                                 <Text style={styles.edittxt}>Edit</Text>
                             </TouchableOpacity>
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
         borderRadius : 50,
         margin : 20,
         flex : 1,
+        backgroundColor : colors.white
     },
     textWrapper : {
         height : '100%',
