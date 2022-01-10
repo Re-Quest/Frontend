@@ -1,36 +1,27 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import colors from '../../assets/colors/colors';
-import * as Font from 'expo-font';
-import { color } from 'react-native-reanimated';
+import Images from './Images';
+import axios from 'axios';
 
 const QuestHolder = (props) => {
     
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
 
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
+    const [questList, setQuestList] = useState(null);
+
     useEffect(()=>{
-        loadFont();
+        axios.get(`http://192.249.18.141:80/api/quest/questsInHolder?questHolder=${props.data._id}`)
+        .then((res)=>{
+            setQuestList(res.data);
+        });
     },[]);
 
-    //
-
     // data
-    const questname = "MT Hotel Reservation";
-    const questnum = 5;
+    const questname = props.data.title;
     const progress = 50;
-    const img = 7;
+    const img = props.data.img;
 
-    const imgurl = "../../assets/images/quests/img_"+img+".png";
-    const questtxt = questnum.toString() + " Quests";
+    const questtxt = ((questList)?questList.length:"0") + " Quests";
     const progtxt = progress.toString() + "%";
     const progcolor = (progress>20)?colors.white:colors.black;
     //
@@ -39,8 +30,8 @@ const QuestHolder = (props) => {
 
     const styles = StyleSheet.create({
         questWrapper : {
-            width : 170,
-            height : 230,
+            width : 150,
+            height : 180,
             backgroundColor : colors.cool_white,
             borderRadius : 20,
             shadowColor : colors.gray,
@@ -62,9 +53,9 @@ const QuestHolder = (props) => {
         },
         questImg : {
             backgroundColor : colors.white,
-            width : 100,
-            height : 100,
-            borderRadius : 50
+            width : 60,
+            height : 60,
+            borderRadius : 30
     
         },
         mainInfo : {
@@ -76,20 +67,20 @@ const QuestHolder = (props) => {
         },
         maintxt : {
             fontFamily : 'ReadexPro-Bold',
-            fontSize : 22,
+            fontSize : 20,
             color : colors.black
     
         },
         midtxt : {
             fontFamily : 'ReadexPro-Bold',
-            fontSize : 17,
+            fontSize : 18,
             color : colors.holder[img],
             marginTop : -5
     
         },
     
         progress : {
-            height : 20,
+            height : 18,
             borderRadius : 9,
             width : '100%',
             backgroundColor : colors.white
@@ -106,28 +97,40 @@ const QuestHolder = (props) => {
             fontFamily : 'ReadexPro-Bold',
             marginLeft : 7,
             position : 'absolute'
+        },
+        progressWrapper : {
+            flexDirection : 'column',
+            justifyContent : 'flex-end',
+            flex:1,
+            width : '100%',
         }
     });
 
 
+    if(questList){
+        
+        return(
+            <View style={styles.questWrapper}>
+                <Image style={styles.questImg} source={Images.quest[img]}/>
+                <View style={styles.mainInfo}>
+                    <Text style={styles.maintxt}>{questname}</Text>
+                    <Text style={styles.midtxt}>{questtxt}</Text>
+                </View>
+                <View style={styles.progressWrapper}>
+                    <View style={styles.progress}>
+                        <View style={styles.progressbar}></View>
+                        <Text style={styles.progresstxt}>{progtxt}</Text>
+                    </View>
+                </View>
 
-
-
-
-
-    return(
-        <View style={styles.questWrapper}>
-            <Image style={styles.questImg} source={require(imgurl)}/>
-            <View style={styles.mainInfo}>
-                <Text style={styles.maintxt}>{questname}</Text>
-                <Text style={styles.midtxt}>{questtxt}</Text>
             </View>
-            <View style={styles.progress}>
-                <View style={styles.progressbar}></View>
-                <Text style={styles.progresstxt}>{progtxt}</Text>
-            </View>
-        </View>
-    );
+        );
+
+    }else{
+        return(<Text>stay..</Text>);
+    }
+
+
 
 };
 

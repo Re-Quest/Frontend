@@ -5,26 +5,12 @@ import colors from '../../assets/colors/colors';
 
 import IconId from '../../assets/icons/icon_id.svg';
 import IconPw from '../../assets/icons/icon_pw.svg';
-import * as Font from 'expo-font';
+
 
 const SignIn = (props) => {
 
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
 
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
-    useEffect(()=>{
-        loadFont();
-    },[]);
 
-    //
     const URL_SIGN_IN = "http://192.249.18.141:80/api/auth/login";
 
     const [ id, setID ] = useState('');
@@ -52,47 +38,39 @@ const SignIn = (props) => {
 
 
 
+    return(
+        <View style={styles.signinpage}>
+
+            <Text style={styles.maintitle}>Hello,{"\n"}Welcome back!</Text>
+            <Text style={styles.subtitle}>Log back into your account</Text>
 
 
-    if(isReady){
-        return(
-            <View style={styles.signinpage}>
-
-                <Text style={styles.maintitle}>Hello,{"\n"}Welcome back!</Text>
-                <Text style={styles.subtitle}>Log back into your account</Text>
-
-
-                <View style={styles.inputWrapper}>
-                    <IconId fill={colors.blue} width={20} height={20} marginLeft={30}/>
-                    <TextInput style={styles.input} onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
-                </View>
-
-                <View style={styles.inputWrapper}>
-                    <IconPw fill={colors.blue} width={20} height={20} marginLeft={30}/>
-                    <TextInput style={styles.input} onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
-                </View>
-
-                
-                <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>signin()}>
-                        <Text style={styles.button}>Login</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View stye={styles.signupWrapper}>
-                    <TouchableOpacity style={{width : '100%', alignItems : 'center'}} onPress={()=>props.navigation.push('SignUp')}>
-                        <Text style={styles.littletitle}>Don't Have a Account?</Text>
-                        <Text style={styles.midtitle}>SignUp</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.inputWrapper}>
+                <IconId fill={colors.blue} width={20} height={20} marginLeft={30}/>
+                <TextInput style={styles.input} onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
             </View>
 
-        );
-    }else{
-        return(
-            <Text>Hi</Text>
-        );
-    }
+            <View style={styles.inputWrapper}>
+                <IconPw fill={colors.blue} width={20} height={20} marginLeft={30}/>
+                <TextInput style={styles.input} onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
+            </View>
+
+            
+            <View style={styles.buttonWrapper}>
+                <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>signin()}>
+                    <Text style={styles.button}>Login</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View stye={styles.signupWrapper}>
+                <TouchableOpacity style={{width : '100%', alignItems : 'center'}} onPress={()=>props.navigation.push('SignUp')}>
+                    <Text style={styles.littletitle}>Don't Have a Account?</Text>
+                    <Text style={styles.midtitle}>SignUp</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+
+    );
 
 
 };

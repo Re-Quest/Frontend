@@ -6,84 +6,70 @@ import * as Font from 'expo-font';
 
 
 
-const QuestView = () => {
+const QuestView = (props) => {
 
-     // Font loading
-     const [isReady, setIsReady] = useState(false);
-
-     const loadFont = async() => {
-         await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-         })
-         setIsReady(true);
-     };
-     useEffect(()=>{
-         loadFont();
-     },[]);
-     //
-     
-
-     // Data
-
-    const taskName = "[ Main Tab Icon File Please! ]";
+    
+    let taskName = "[ Main Tab Icon File Please! ]";
     const lastHolder = "EUN-HO";
     const currHolder = "ME";
     const comment = "Thank you"
     const date = "01-08-FRI 5PM";
     const next = ">";
+
+
+    if(props.data){
+        taskName = "["+props.data.title+"]";
+
+        
+    }
+
     //
 
-    if(isReady){
-        return(
-            <View style={styles.questWrapper}>
-                <View style={styles.mainWrapper}>
-                    <Text style={styles.titletxt}>{taskName}</Text>
-                    <View>
-                        <TouchableOpacity>
-                            <Text style={styles.buttontxt}>+</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-    
-                <View style={styles.midWrapper}>
-                    <View style={styles.txtbox}>
-                        <Text style={styles.txt}>{lastHolder}</Text>
-                    </View>
-                    <View>
-                        <Text style={styles.midtxt}>{next}</Text>
-                    </View>
-                    <View style={styles.txtbox}>
-                        <Text style={styles.txt}>{currHolder}</Text>
-                    </View>
-    
-                </View>
-    
-                <View style={styles.subWrapper}>
-                    <View style={{flex:1}}>
-                        <Text style={styles.light_title}>RECENT COMMENT</Text>
-                        <View style={styles.comment}>
-                            <Image style={styles.comment_img} source={Img}/>
-                            <Text style={styles.midtxt}>{comment}</Text>
-                        </View>
-                    </View>
-    
-                    <View style={{flex:1}}>
-                        <Text style={styles.light_title}>DUE DATE</Text>
-                        <View style={styles.date_box}>
-                            <Text style={styles.datetxt}>{date}</Text>
-                        </View>
-                    </View>
-    
-    
+    return(
+        <View style={styles.questWrapper}>
+            <View style={styles.mainWrapper}>
+                <Text style={styles.titletxt}>{taskName}</Text>
+                <View>
+                    <TouchableOpacity>
+                        <Text style={styles.buttontxt}>+</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-        );
 
-    }else{
-        return(<Text>hi</Text>);
-    }
+            <View style={styles.midWrapper}>
+                <View style={styles.txtbox}>
+                    <Text style={styles.txt}>{lastHolder}</Text>
+                </View>
+                <View>
+                    <Text style={styles.midtxt}>{next}</Text>
+                </View>
+                <View style={styles.txtbox}>
+                    <Text style={styles.txt}>{currHolder}</Text>
+                </View>
+
+            </View>
+
+            <View style={styles.subWrapper}>
+                <View style={{flex:1}}>
+                    <Text style={styles.light_title}>RECENT COMMENT</Text>
+                    <View style={styles.comment}>
+                        <Image style={styles.comment_img} source={Img}/>
+                        <Text style={styles.midtxt}>{comment}</Text>
+                    </View>
+                </View>
+
+                <View style={{flex:1}}>
+                    <Text style={styles.light_title}>DUE DATE</Text>
+                    <View style={styles.date_box}>
+                        <Text style={styles.datetxt}>{date}</Text>
+                    </View>
+                </View>
+
+
+            </View>
+        </View>
+    );
+
 
 };
 export default QuestView;

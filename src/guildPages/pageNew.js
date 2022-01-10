@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView} from 'r
 
 import Title from './title';
 import colors from '../../assets/colors/colors';
+import axios from 'axios';
 
 import IconHolder from '../../assets/icons/icon_holder.svg';
 import IconAdd from '../../assets/icons/icon_add.svg';
@@ -12,13 +13,23 @@ import Holder from '../guildComponents/Holder';
 const PageNew = (props) => {
 
     const guildName = props.userToken.guildInfo[0].guildId;
-    const dummy = [0,1,2,3,4,5]
-    const [currHolder, setCurrHolder] = useState(null);
+    const [currHolder, setCurrHolder] = useState(null); //index of selected holder
+    const [holderList, setHolderList] = useState(null); // all list of holders
 
     useEffect(()=>{
+        // to refresh the page initialize the data
         setCurrHolder(null);
-    },[]);
+        setHolderList(null);
+        axios.get("http://192.249.18.141:80/api/quest/readHolders")
+        .then((res)=>{
+            setHolderList(res.data);
+        });
+    },[props.refresh]);
 
+    const nextpage = () => {
+        props.setHolder(holderList[currHolder]); // to pass the current holder data
+        props.navigation.push('NewQuest');
+    };
 
     const styles = StyleSheet.create({
         box : {
@@ -45,7 +56,7 @@ const PageNew = (props) => {
             marginTop : 12,
             marginBottom : 18,
             borderRadius : 20,
-            backgroundColor : (currHolder===null)?colors.light_gray:colors.blue,
+            backgroundColor : (currHolder===null)?colors.cool_white:colors.blue,
         },
         titleWrapper : {
             width : '100%',
@@ -95,46 +106,50 @@ const PageNew = (props) => {
     
     });
 
-
-    return(
-        <View style={styles.box} >
-            <Title guildName={guildName} pageName="new quest"/>
-            <View style={styles.newpage}>
-
-                <View style={styles.titleWrapper}>
-                    <IconHolder fill={colors.blue} width={25} height={25} marginLeft={8}/>
-                    <View style={styles.txtWrapper}>
-                        <Text style={styles.maintxt}>QUEST HOLDER</Text>
-                        <Text style={styles.subtxt}>Select quest holder</Text>
+    if(holderList){
+        return(
+            <View style={styles.box} >
+                <Title guildName={guildName} pageName="new quest"/>
+                <View style={styles.newpage}>
+    
+                    <View style={styles.titleWrapper}>
+                        <IconHolder fill={colors.blue} width={25} height={25} marginLeft={8}/>
+                        <View style={styles.txtWrapper}>
+                            <Text style={styles.maintxt}>QUEST HOLDER</Text>
+                            <Text style={styles.subtxt}>Select quest holder</Text>
+                        </View>
                     </View>
+                    <View style={styles.scroll}>
+                        <ScrollView overScrollMode='never'>
+                            <>
+                                <View style={styles.newWrapper}>
+                                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>props.navigation.push('NewQuestHolder')}>
+                                        <IconAdd fill={colors.mid_gray} width={25} height={25} margin={5}/>
+                                        <Text style={styles.newtxt}>NEW QUEST HOLDER</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </>
+                            {holderList.map((item, idx)=>{
+                                return <Holder data={item} setCurrHolder={setCurrHolder} currHolder={currHolder} idx={idx} key={idx}/>;
+                            })}
+                        </ScrollView>
+                    </View>
+    
+                    <View style={styles.buttonWrapper}>
+                        <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>nextpage()} disabled={currHolder===null}>
+                            <Text style={styles.button}>NEXT</Text>
+                        </TouchableOpacity>
+                    </View>
+    
                 </View>
-                <View style={styles.scroll}>
-                    <ScrollView overScrollMode='never'>
-                        <>
-                            <View style={styles.newWrapper}>
-                                <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>props.navigation.push('NewQuestHolder')}>
-                                    <IconAdd fill={colors.mid_gray} width={25} height={25} margin={5}/>
-                                    <Text style={styles.newtxt}>NEW QUEST HOLDER</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </>
-                        {dummy.map((idx)=>{
-                            const url = "../../assets/images/quests/img_"+idx+".png"
-                            return <Holder key={idx} idx={idx} setCurrHolder={setCurrHolder} currHolder={currHolder} selected={idx===currHolder}/>;
-                        })}
-                    </ScrollView>
-                </View>
-
-                <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>props.navigation.push('NewQuest')} disabled={currHolder===null}>
-                        <Text style={styles.button}>NEXT</Text>
-                    </TouchableOpacity>
-                </View>
-
+    
             </View>
+        );
 
-        </View>
-    );
+    }else{
+        return(<Text>wait..</Text>);
+    }
+
 
 };
 
