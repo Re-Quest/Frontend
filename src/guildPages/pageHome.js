@@ -43,18 +43,18 @@ const pageHome = (props) => {
             <View style={styles.box}>
                 <Title pageName="home" guildName={guildName}/>
                 <View style={styles.homepage}>
-                    <View style={styles.search}>
-                        <IconSearch style={{width : 20, height : 20}} fill={colors.blue} />
-                        <TextInput style={styles.search} placeholder='find your teammates' onChangeText={(val) => setFilter(val.toLowerCase())} selectionColor={colors.blue}/>
+                    <View style={styles.holderWrapper}>
+                        <Text style={styles.titletxt}>TEAMMATES</Text>
+                        <View style={styles.search}>
+                            <IconSearch style={{width : 20, height : 20}} fill={colors.blue} />
+                            <TextInput style={styles.search} placeholder="find your teammates" onChangeText={(val) => setFilter(val.toLowerCase())} selectionColor={colors.blue}/>
+                        </View>
+                        <ScrollView style={styles.scroll} horizontal={true} overScrollMode='never'>
+                            {filterList.map((item,idx)=>{
+                                return(<CardProfile data={item} key={idx} />);
+                            })}           
+                        </ScrollView>
                     </View>
-          
-                    <ScrollView horizontal={true} overScrollMode='never'>
-                        {filterList.map((item,idx)=>{
-                            return(<CardProfile data={item} key={idx} />);
-                        })}
-                    </ScrollView>
-                    
-                    <TouchableOpacity style={{width:100,height:100,backgroundColor:colors.black}} onPress={()=>check()}></TouchableOpacity>
                 </View>
             </View>
     
@@ -81,6 +81,13 @@ const styles = StyleSheet.create({
         backgroundColor : colors.white,
         alignItems : 'center'
     },
+    holderWrapper : {
+        width : '100%',
+        flexDirection : 'column',
+        justifyContent : 'flex-start',
+        alignItems : 'center',
+
+    },
     search : {
         flexDirection : 'row',
         alignItems : 'center',
@@ -93,6 +100,20 @@ const styles = StyleSheet.create({
         fontFamily : 'ReadexPro-Regular',
         fontSize : 18,
         color : colors.black
-    }
+    },
+    titletxt : {
+        fontSize : 20,
+        fontFamily : 'ReadexPro-Bold',
+        color : colors.black,
+        alignSelf :'flex-start',
+        marginLeft : 10,
+        marginBottom : 5
+    },
+    scroll : {
+        width : '100%',
+        marginVertical : 10,
+
+
+    },
 });
 

@@ -3,34 +3,27 @@ import Swiper from 'react-native-swiper';
 import colors from '../../assets/colors/colors';
 import React, {useState, useEffect} from 'react';
 import QuestView from './QuestView';
-import * as Font from 'expo-font';
+import axios from "axios";
 
 const ScrollQuest = (props) => {
 
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
+    const [data, setData] = useState(null);
 
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
     useEffect(()=>{
-        loadFont();
+        setData(null);
+        axios.get("http://192.249.18.141:80/api/quest/userQuests")
+        .then((res)=>setData(res.data));
     },[]);
-    //
 
-    const [swipeTitle, setSwipeTitle] = useState('ON PROGRESS')
+    const [swipeTitle, setSwipeTitle] = useState('QUESTED');
 
     const handleSwipe = (idx) => {
         if(idx===0){
             setSwipeTitle('QUESTED');
         }else if(idx===1){
-            setSwipeTitle('ON PROGRESS');
+            setSwipeTitle('INVENTORY');
         }else{
-            setSwipeTitle('TERMINATED');
+            setSwipeTitle('OUTVENTORY');
         }
     };
 
@@ -38,30 +31,53 @@ const ScrollQuest = (props) => {
         top : "-115%"
     };
 
-    return(
-        <View style={styles.swiperWrapper}>
-            <Text style={styles.title} >{swipeTitle}</Text>
-            <Swiper loop={false} index={0} paginationStyle={pagination} onIndexChanged={(idx)=>handleSwipe(idx)} >
-                <View style={{width : '90%', height : '100%',marginHorizontal:'5%', backgroundColor : colors.cool_white}}>
-                    <Text>{`Scroll1 ${props.position}`}</Text>
-                    <QuestView />
-                </View>
-                <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
-                    <ScrollView contentContainerStyle={{alignItems:'center'}} horizontal={false} overScrollMode="never">
-                        <QuestView />
-                        <QuestView />
-                        <QuestView />
-                        <QuestView />
-                    </ScrollView>
-                </View>
-                <View style={{width : '90%', height : '100%',marginHorizontal:'5%', backgroundColor : colors.cool_white}}>
-                    <Text>{`Scroll3 ${props.position}`}</Text>
-                </View>
-            </Swiper>
-        </View>
+    if(data){
+        console.log(data);
+        return(
+            <View style={styles.swiperWrapper}>
+                <Text style={styles.title} >{swipeTitle}</Text>
+                <Swiper loop={false} index={1} paginationStyle={pagination} onIndexChanged={(idx)=>handleSwipe(idx)} >
+                    <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
+                        <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}} horizontal={false} overScrollMode="never">
+                            {(data.generated.length)?<>{
+                                data.generated.map((item,idx)=>{
+                                    return(<QuestView data={item} key={idx}/>);
+                                })
+                            }</>:(<View style={styles.emptyWrapper}>
+                                <Text style={styles.empty}>No Quest</Text>
+                            </View>)}
+                        </ScrollView>
+                    </View>
+                    <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
+                        <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}} horizontal={false} overScrollMode="never">
+                            {(data.sent.length)?<>{
+                                data.sent.map((item,idx)=>{
+                                    return(<QuestView data={item} key={idx}/>);
+                                })
+                            }</>:(<View style={styles.emptyWrapper}>
+                                <Text style={styles.empty}>No Quest</Text>
+                            </View>)}
+                        </ScrollView>
+                    </View>
+                    <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
+                        <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}} horizontal={false} overScrollMode="never">
+                            {(data.received.length)?<>{
+                                data.received.map((item,idx)=>{
+                                    return(<QuestView data={item} key={idx}/>);
+                                })
+                            }</>:(<View style={styles.emptyWrapper}>
+                                <Text style={styles.empty}>No Quest</Text>
+                            </View>)}
+                        </ScrollView>
+                    </View>
+                </Swiper>
+            </View>
+        );
 
+    }else{
+        return(<Text>stay</Text>);
+    }
 
-    );
 };
 
 export default ScrollQuest;
@@ -81,5 +97,18 @@ const styles = StyleSheet.create({
         fontSize : 20,
         marginVertical : '2%',
         color : colors.black
+    },
+    empty : {
+
+        fontSize : 18,
+        fontFamily : 'ReadexPro-Medium',
+        color : colors.light_gray,
+
+    },
+    emptyWrapper : {
+        height : '100%',
+        flex : 1,
+        alignItems : 'center',
+        justifyContent : 'center'
     }
 });

@@ -48,7 +48,6 @@ const NewQuest = (props) => {
             comment : comment,
             receiver : receiver,
             dueDate : new Date(),
-            img : img
         };
         console.log(quest);
 
