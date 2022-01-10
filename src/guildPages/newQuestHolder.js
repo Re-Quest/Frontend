@@ -11,6 +11,7 @@ import IconDue from '../../assets/icons/icon_due.svg';
 import IconImg from '../../assets/icons/icon_img.svg';
 import IconAssign from '../../assets/icons/icon_assign.svg';
 import IconComment from '../../assets/icons/icon_comment.svg';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 
 const NewQuestHolder = (props) => {
@@ -31,18 +32,27 @@ const NewQuestHolder = (props) => {
 
     const [assigned, setAssigned] = useState([]);
     const [title, setTitle] = useState('');
-    const [date, setDate] = useState('2021-01-12 17:30:00');
+    const [date, setDate] = useState(new Date());
     const [comment, setComment] = useState();
     const [img, setImg] = useState(0);
     const [join, setJoin] = useState([]);
+    const [showDate, setShowDate] = useState(false);
+    const [showTime, setShowTime] = useState(false);
 
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowDate(false);
+        setShowTime(false);
+        currentDate.setSeconds(0);
+        setDate(currentDate);
+    }
 
     const create = () =>{
 
         const holder = {
             title : title,
             detail : comment,
-            dueDate : new Date(),
+            dueDate : date,
             img : img
         };
         axios.post("http://192.249.18.141:80/api/quest/registerHolder",holder)
@@ -104,8 +114,44 @@ const NewQuestHolder = (props) => {
                             <IconDue fill={colors.blue} width={20} height={20}/>
                             <Text style={styles.titletxt}>DUE DATE</Text>
                         </View>
-                        <View style={styles.dateinput}>
-                            <TextInput defaultValue={date} style={styles.input} onChangeText={(val) => setDate(val)} selectionColor={colors.blue} />
+                        <View style={styles.horizontalHolderSpaceBetween}>
+
+                            <TouchableOpacity
+                                style={styles.date}
+                                onPress={() => setShowDate(true)}>
+                                <Text>{date.toLocaleDateString()}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.date}
+                                onPress={() => setShowTime(true)}>
+                                <Text>{date.toLocaleTimeString().substr(0,5)}</Text>
+                            </TouchableOpacity>
+                            <>
+                                {showTime && (
+                                    <DateTimePicker
+                                        style={{height: 30, flex: 1}}
+                                        value={date}
+                                        mode='time'
+                                        is24Hour={true}
+                                        display="default"
+                                        onChange={onChange}
+                                    />
+                                )}
+
+                            </>
+                            <>
+                                {showDate && (
+                                    <DateTimePicker
+                                        style={{height: 30, flex: 1}}
+                                        value={date}
+                                        mode='date'
+                                        is24Hour={true}
+                                        display="default"
+                                        onChange={onChange}
+                                    />
+                                )}
+                            </>
+
                         </View>
                     </View>
 
@@ -285,6 +331,24 @@ const styles = StyleSheet.create({
         borderRadius : 20,
         backgroundColor : colors.white,
         marginHorizontal : 10
-    }
+    },
 
+    horizontalHolderSpaceBetween: {
+        height: 40,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: "center"
+    },
+    date: {
+        flex: 1,
+        width: "50%",
+        height : '100%',
+        borderRadius : 20,
+        backgroundColor : colors.cool_white,
+        fontSize : 18,
+        fontFamily : 'ReadexPro-Regular',
+        paddingHorizontal : 30,
+        alignItems: "center",
+        justifyContent: "center"
+    }
 });
