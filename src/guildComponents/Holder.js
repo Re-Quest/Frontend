@@ -3,16 +3,31 @@ import {Text, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../../assets/colors/colors';
 import images from '../mainComponents/Images';
+import axios from 'axios';
+
+const showDate = (data) => {
+    const date = data.split("T")[0];
+    const hour = parseInt(data.split("T")[1].split(":")[0]);
+    const min = parseInt(data.split("T")[1].split(":")[1]);
+    const time = (hour>=12)?"PM":"AM";
+
+    if(hour>12){
+        return date + "\n" + (hour-12) + ":" + min + time;
+    }else{
+        return date + "\n" + hour + ":" + min + time;
+    }
+}
 
 const Holder = (props) => {
 
     //data
-    const holderName = "MT Hotel Reservation";
-    const holderDetail = "Let's go 2022 winter mt!";
-    const holderCreater = props.idx;
-    const holderimg = props.idx;
-    const holderdue = "2022-01-03";
+    const holderName = props.data.title;
+    const holderDetail = props.data.detail;
+    const holderCreater = props.data.generatedBy;
+    const holderimg = props.data.img;
+    const holderdue = showDate(props.data.dueDate);
 
+    const createrimg = holderCreater.profileImg;
 
     const select = () => {
         if(props.currHolder === props.idx){
@@ -31,9 +46,18 @@ const Holder = (props) => {
             flexDirection : 'row',
             justifyContent : 'flex-start',
             alignItems : 'center',
-            backgroundColor : (props.selected)?colors.blue:colors.cool_white,
+            backgroundColor : colors.cool_white,
             marginVertical : 8
-    
+        },
+        holderWrapperSelected:{
+            width : '100%',
+            height : 110,
+            borderRadius : 20,
+            flexDirection : 'row',
+            justifyContent : 'flex-start',
+            alignItems : 'center',
+            backgroundColor : colors.blue,
+            marginVertical : 8
         },
         holderimg:{
             height : 70,
@@ -74,7 +98,7 @@ const Holder = (props) => {
         subtxt:{
             fontSize : 15,
             fontFamily : 'ReadexPro-Regular',
-            color : colors.mid_gray
+            color : (props.idx===props.currHolder)?colors.white:colors.mid_gray
         },
         createrimg:{
             height : 32,
@@ -92,21 +116,20 @@ const Holder = (props) => {
     
         },
         datetxt : {
-            fontSize : 18,
-            fontFamily : 'ReadexPro-Medium',
-            color : colors.holder[holderimg],
+            fontSize : 15,
+            fontFamily : 'ReadexPro-Bold',
+            color : (props.idx===props.currHolder)?colors.white:colors.holder[holderimg],
             marginHorizontal : 5
-    
         }
     
     });
 
 
 
-
+    
     return(
-        <TouchableOpacity onPress={()=>select()}>
-            <View style={styles.holderWrapper}>
+        <TouchableOpacity onPress={()=>select(props.currHolder)} disabled={props.view}>
+            <View style={(props.idx!==props.currHolder || props.view)?styles.holderWrapper : styles.holderWrapperSelected}>
             
                 <Image style={styles.holderimg} source={images.quest[holderimg]}/>
                 <View style={styles.txtWrapper}>
@@ -115,7 +138,7 @@ const Holder = (props) => {
                     <View style={styles.subWrapper}>
                         <View style={styles.createrWrapper}>
                             <Text style={styles.subtxt}>CREATER</Text>
-                            <Image style={styles.createrimg} source={images.profile[holderCreater]}/>
+                            <Image style={styles.createrimg} source={images.profile[createrimg]}/>
                         </View>
                         <View style={styles.dateWrapper}>
                             <Text style={styles.subtxt}>DUE DATE</Text>
@@ -127,7 +150,6 @@ const Holder = (props) => {
                 </View>
             </View>
         </TouchableOpacity>
-        
     );
 };
 

@@ -1,42 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import colors from '../../assets/colors/colors';
-import * as Font from 'expo-font';
+import Images from './Images';
+
 
 const CardProfile = (props) => {
     
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
-
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
-    useEffect(()=>{
-        loadFont();
-    },[]);
-
-    //
 
     // data
-    const username = "Hye1ee";
-    const position = "Frontend";
-    const phone = "010-9021-0167";
-    const img = "1";
-    const email = "hyewon0809@kaist.ac.kr";
+    const username = props.data.userId;
+    const position = "dummy";
+    const phone = props.data.phone;
+    const img = props.data.profileImg;
+    const email = props.data.email;
 
-    const imgurl = "../../assets/images/img_"+img+".png";
     const subtxt = phone + '\n' + email;
 
     return(
         <View style={styles.cardWrapper}>
-            <Image style={styles.cardImg} source={require(imgurl)}/>
+            <Image style={styles.cardImg} source={Images.profile[img]}/>
             <View style={styles.mainInfo}>
-                <Text style={styles.maintxt}>{username}</Text>
+                <Text style={styles.maintxt}>{username.toUpperCase()}</Text>
                 <Text style={styles.midtxt}>{position.toUpperCase()}</Text>
             </View>
             <View style={styles.subInfo}>
@@ -51,7 +35,7 @@ export default CardProfile;
 
 const styles = StyleSheet.create({
     cardWrapper : {
-        width : 190,
+        width : 180,
         height : 220,
         backgroundColor : colors.cool_white,
         borderRadius : 20,
@@ -67,7 +51,8 @@ const styles = StyleSheet.create({
         flexDirection : 'column',
         alignItems : 'center',
         justifyContent : 'flex-start',
-        padding : 15,
+        paddingHorizontal : 15,
+        paddingVertical : 10,
         marginVertical : 5,
         marginHorizontal : 10
 
@@ -76,10 +61,12 @@ const styles = StyleSheet.create({
         backgroundColor : colors.white,
         width : 100,
         height : 100,
-        borderRadius : 50
-
+        borderRadius : 50,
+        marginBottom : 8
+    
     },
     mainInfo : {
+        flex : 1,
         flexDirection : 'column',
         alignItems : 'flex-start',
         alignSelf : 'flex-start',
@@ -88,18 +75,19 @@ const styles = StyleSheet.create({
     },
     maintxt : {
         fontFamily : 'ReadexPro-Bold',
-        fontSize : 20,
+        fontSize : 22,
         color : colors.black
 
     },
     midtxt : {
         fontFamily : 'ReadexPro-Bold',
-        fontSize : 15,
+        fontSize : 16,
         color : colors.blue,
-        marginTop : -5
+        marginTop : -6
 
     },
     subInfo : {
+        flex : 1,
         flexDirection : 'column',
         alignItems : 'flex-start',
         alignSelf : 'flex-start',

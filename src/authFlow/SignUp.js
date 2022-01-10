@@ -41,7 +41,7 @@ const SignUp = (props) =>{
             "password" : password,
             "email" : email,
             "phone" : phone,
-            "profileImg" : 0
+            "profileImg" : 3
         }).then((res)=>{
             console.log(res);
             setID('');

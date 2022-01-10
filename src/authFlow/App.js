@@ -7,12 +7,11 @@ import GuildTitle from '../guildComponents/GuildTitle';
 const App = (props) => {
 
   const navigationref = useRef();
-  const [position, setPosition] = useState("");
 
   return (
     <View style={styles.fullscreen}>
       <View style={styles.contents}>
-          <GuildTab position={position} userToken={props.userToken}/>
+          <GuildTab userToken={props.userToken}/>
       </View>
     </View>
   );

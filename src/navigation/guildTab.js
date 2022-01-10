@@ -1,6 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {View, StyleSheet, StatusBar} from 'react-native';
 import colors from '../../assets/colors/colors';
+import React,{useState, useEffect} from 'react';
 
 import PageHome from '../guildPages/pageHome';
 import PageQuest from '../guildPages/pageQuest';
@@ -26,13 +27,14 @@ const GuildTab = (props) => {
     "userId": "hyewon",
     "username": "HyewonLee",
     */
+    const [refresh, setRefresh] = useState(false);
 
     return(
         <Tab.Navigator style={styles.component} screenOptions={navoptions}>
-            <Tab.Screen name="Home" children={()=><PageHome position={props.position} userToken={props.userToken}/>} options={homeoptions}/>
-            <Tab.Screen name="New" children={()=><QuestNavigator position={props.position} userToken={props.userToken}/>} options={newoptions}/>
-            <Tab.Screen name="Quest" children={()=><PageQuest position={props.position} userToken={props.userToken}/>} options={questoptions}/>
-            <Tab.Screen name="My" children={()=><PageMy position={props.position} userToken={props.userToken}/>} options={myoptions}/>
+            <Tab.Screen name="Home" children={()=><PageHome refresh={refresh} userToken={props.userToken}/>} options={homeoptions}/>
+            <Tab.Screen name="New" children={()=><QuestNavigator refresh={refresh} setRefresh={setRefresh} userToken={props.userToken}/>} options={newoptions}/>
+            <Tab.Screen name="Quest" children={()=><PageQuest refresh={refresh} userToken={props.userToken}/>} options={questoptions}/>
+            <Tab.Screen name="My" children={()=><PageMy  userToken={props.userToken}/>} options={myoptions}/>
         </Tab.Navigator>
     );
 };
@@ -59,12 +61,11 @@ const navoptions = {
     tabBarInactiveTintColor : colors.cool_white,
     tabBarShowLabel : false,
     tabBarStyle : {
-        height : '10%',
+        height : '9%',
         elevation : 25,
         borderTopWidth : 0
     },
     position : 'absolute'
-    
     
 };
 
