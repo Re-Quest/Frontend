@@ -3,27 +3,10 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import colors from '../../assets/colors/colors';
 
-import * as Font from 'expo-font';
+
 import IconBack from '../../assets/icons/icon_back.svg';
 
 const SignUp = (props) =>{
-
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
-
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
-    useEffect(()=>{
-        loadFont();
-    },[]);
-
-    //
 
 
     const URL_SIGN_UP = "http://192.249.18.141:80/api/auth/register";
@@ -34,26 +17,19 @@ const SignUp = (props) =>{
     const [ email, setEmail ] = useState('');
     const [ phone, setPhone ] = useState('');
 
-    const signup = () => {
-        axios.post(URL_SIGN_UP, {
+    const next = () => {
+
+        props.setRegister({
             "userId" : id,
             "username" : name,
             "password" : password,
             "email" : email,
             "phone" : phone,
-            "profileImg" : 3
-        }).then((res)=>{
-            console.log(res);
-            setID('');
-            setName('');
-            setPassWord('');
-            setEmail('');
-            setPhone('');
-            props.navigation.pop();
         });
+        props.navigation.push('SignUpInfo');
     };
 
-    if(isReady){
+
         return(
             <View style={styles.signuppage}>
 
@@ -88,18 +64,14 @@ const SignUp = (props) =>{
 
                 
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>signup()}>
-                        <Text style={styles.button}>Create</Text>
+                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>next()}>
+                        <Text style={styles.button}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
         );
-    }else{
-        return(
-            <Text>Hi</Text>
-        );
-    }
+
 };
 
 export default SignUp;

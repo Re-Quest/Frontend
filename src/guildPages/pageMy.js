@@ -26,7 +26,7 @@ const pageMy = (props) => {
                 <MyProfile userToken={props.userToken}/>
                 <View style={styles.questWrapper}>
                     <View style={styles.questBack}></View>
-                    <SwipeQuest style={styles.questFront} position="hi"/>
+                    <SwipeQuest style={styles.questFront} position="hi" refresh={props.refresh}/>
                 </View>
             </View>
         </View>

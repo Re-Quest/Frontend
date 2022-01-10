@@ -58,8 +58,8 @@ const NewQuest = (props) => {
             questHolder : props.holder._id,
             comment : comment,
             receiver : receiver,
-            dueDate : date
 
+            dueDate : date
         };
         console.log(quest);
 

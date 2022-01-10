@@ -13,7 +13,7 @@ const ScrollQuest = (props) => {
         setData(null);
         axios.get("http://192.249.18.141:80/api/quest/userQuests")
         .then((res)=>setData(res.data));
-    },[]);
+    },[props.refresh]);
 
     const [swipeTitle, setSwipeTitle] = useState('QUESTED');
 

@@ -60,7 +60,7 @@ const QuestView = (props) => {
         return(
             <View style={styles.questWrapper}>
                 <View style={styles.mainWrapper}>
-                    <View style={{marginRight:30}}>
+                    <View style={{width : 250}}>
                         <ScrollView horizontal={true} pagingEnabled={true}>
                             <Text style={styles.titletxt}>{title}</Text>
                         </ScrollView>
