@@ -57,8 +57,8 @@ const PageQuest = (props) => {
                         <ScrollView style={styles.scroll} horizontal={true} overScrollMode='never'>
                             {filterList.map((item, idx)=>{
                                 return(
-                                    <TouchableOpacity key={idx} onPress={()=>select(item)}>
-                                        <QuestHolder data={item} idx={idx}/>
+                                    <TouchableOpacity key={idx} onPress={()=>select(item)} activeOpacity={1}>
+                                        <QuestHolder data={item} idx={idx} selectHolder={selectHolder}/>
                                     </TouchableOpacity>
                                 );
                             })}            

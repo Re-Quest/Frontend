@@ -70,7 +70,7 @@ const SignUp = (props) =>{
 
                 <View style={styles.inputContainer}>
                     <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Username" onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
+                        <TextInput style={styles.input} placeholder="Id" onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
                     </View>
                     <View style={styles.inputWrapper}>
                         <TextInput style={styles.input} placeholder="Password" onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />

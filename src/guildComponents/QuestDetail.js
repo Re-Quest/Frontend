@@ -14,9 +14,9 @@ const showDate = (data) => {
     const time = (hour>=12)?"PM":"AM";
 
     if(hour>12){
-        return date + "\n" + (hour-12) + ":" + min + time;
+        return date;
     }else{
-        return date + "\n" + hour + ":" + min + time;
+        return date;
     }
 }
 
@@ -53,13 +53,24 @@ const QuestDetail = (props) => {
         return(
             <View style={styles.detailWrapper}>
                 <Text style={styles.titletxt}>DETAILS</Text>
-                <Text>{props.data.generatedBy.userId}</Text>
-                <Text>{showDate(props.data.genDate)}</Text>
-                <Image source={Images.profile[createrImg]}/>
-                <ScrollView contentContainerStyle={{alignItems : 'center'}}>
-                    {quests.map((item,idx)=>{
-                        return(<QuestView data={item} key={idx}/>);
-                    })}
+                <View style={{flexDirection:'row',marginLeft :10}}>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={styles.detail}>CREATED BY </Text>
+                        <Image source={Images.profile[createrImg]}/>
+                        <Text style={styles.detailHighlight}>{props.data.generatedBy.userId.toUpperCase()}</Text>
+                        <Text style={styles.detail}>AT </Text>
+                        <Text style={styles.detailHighlight}>{showDate(props.data.genDate)}</Text>
+                    </View>
+                </View>
+                
+                <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}}>
+                    {(quests.length)?<>{
+                        quests.map((item,idx)=>{
+                            return(<QuestView data={item} key={idx}/>);
+                        })
+                    }</>:(<View style={styles.emptyWrapper}>
+                        <Text style={styles.empty}>No Quest</Text>
+                    </View>)}
                 </ScrollView>
             </View>
         );
@@ -74,18 +85,42 @@ export default QuestDetail;
 const styles = StyleSheet.create({
     detailWrapper :{
         flex : 1,
-        width : '100%'
+        width : '100%',
+        marginHorizontal : 20,
 
     },
     titletxt : {
         fontSize : 20,
         fontFamily : 'ReadexPro-Bold',
         color : colors.black,
-        marginLeft : 10,
+        marginLeft :10
+
     },
     detail : {
+        marginTop : -3,
+        fontSize : 17,
+        fontFamily : 'ReadexPro-Regular',
+        color : colors.light_gray,
+    },
+    detailHighlight : {
+        marginTop : -3,
+        fontSize : 17,
+        fontFamily : 'ReadexPro-Medium',
+        color : colors.blue,
+        marginHorizontal : 5
+    },
+    empty : {
 
+        fontSize : 18,
+        fontFamily : 'ReadexPro-Medium',
+        color : colors.light_gray,
 
+    },
+    emptyWrapper : {
+        height : '100%',
+        flex : 1,
+        alignItems : 'center',
+        justifyContent : 'center'
     }
 
 });

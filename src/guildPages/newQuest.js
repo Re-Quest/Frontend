@@ -59,6 +59,7 @@ const NewQuest = (props) => {
             comment : comment,
             receiver : receiver,
             dueDate : date
+
         };
         console.log(quest);
 
