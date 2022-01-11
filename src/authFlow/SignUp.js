@@ -12,27 +12,10 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import colors from '../../assets/colors/colors';
 
-import * as Font from 'expo-font';
+
 import IconBack from '../../assets/icons/icon_back.svg';
 
 const SignUp = (props) =>{
-
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
-
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
-    useEffect(()=>{
-        loadFont();
-    },[]);
-
-    //
 
 
     const URL_SIGN_UP = "http://192.249.18.141:80/api/auth/register";
@@ -43,26 +26,19 @@ const SignUp = (props) =>{
     const [ email, setEmail ] = useState('');
     const [ phone, setPhone ] = useState('');
 
-    const signup = () => {
-        axios.post(URL_SIGN_UP, {
+    const next = () => {
+
+        props.setRegister({
             "userId" : id,
             "username" : name,
             "password" : password,
             "email" : email,
             "phone" : phone,
-            "profileImg" : 3
-        }).then((res)=>{
-            console.log(res);
-            setID('');
-            setName('');
-            setPassWord('');
-            setEmail('');
-            setPhone('');
-            props.navigation.pop();
         });
+        props.navigation.push('SignUpInfo');
     };
 
-    if(isReady){
+
         return(
             <View  style={styles.signuppage}>
                 <KeyboardAvoidingView style={{width: "100%", alignItems:"center", justifyContent:"center"}} behavior={"padding"}>
@@ -82,34 +58,31 @@ const SignUp = (props) =>{
                         <View style={styles.inputWrapper}>
                             <TextInput style={styles.input} placeholder="Id" onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
                         </View>
-                        <View style={styles.inputWrapper}>
-                            <TextInput style={styles.input} placeholder="Password" onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
-                        </View>
-                        <View style={styles.inputWrapper}>
-                            <TextInput style={styles.input} placeholder="Name" onChangeText={(val) => setName(val)} selectionColor={colors.blue}  />
-                        </View>
-                        <View style={styles.inputWrapper}>
-                            <TextInput style={styles.input} placeholder="Email" onChangeText={(val) => setEmail(val)} selectionColor={colors.blue}  />
-                        </View>
-                        <View style={styles.inputWrapper}>
-                            <TextInput style={styles.input} placeholder="Phone" onChangeText={(val) => setPhone(val)} selectionColor={colors.blue}  />
-                        </View>
-                    </View>
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Password" onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
+                      </View>                    
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Name" onChangeText={(val) => setName(val)} selectionColor={colors.blue}  />
+                      </View>                    
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Email" onChangeText={(val) => setEmail(val)} selectionColor={colors.blue}  />
+                      </View>                    
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Phone" onChangeText={(val) => setPhone(val)} selectionColor={colors.blue}  />
+                      </View>
+                  </View>
 
+                  <View style={styles.buttonWrapper}>
+                      <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>next()}>
+                          <Text style={styles.button}>Next</Text>
+                      </TouchableOpacity>
+                  </View>
 
-                    <View style={styles.buttonWrapper}>
-                        <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>signup()}>
-                            <Text style={styles.button}>Create</Text>
-                        </TouchableOpacity>
-                    </View>
                 </KeyboardAvoidingView>
+
             </View>
         );
-    }else{
-        return(
-            <Text>Hi</Text>
-        );
-    }
+
 };
 
 export default SignUp;

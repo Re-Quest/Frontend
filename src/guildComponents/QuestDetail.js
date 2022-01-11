@@ -8,11 +8,16 @@ import axios from 'axios';
 
 
 const showDate = (data) => {
-    const date = data.split("T")[0];
-    const hour = parseInt(data.split("T")[1].split(":")[0]);
-    const min = parseInt(data.split("T")[1].split(":")[1]);
-    const time = (hour>=12)?"PM":"AM";
+    const tmp = new Date(data);
 
+    const date = tmp.getFullYear() + "-" +
+                ((tmp.getMonth()+1>9)?(tmp.getMonth()+1):'0'+(tmp.getMonth()+1)) + "-" +
+                ((tmp.getDate()>9)?tmp.getDate():'0'+tmp.getDate())
+
+    const hour = tmp.getHours();
+    const min = tmp.getMinutes();
+
+    const time = (hour>=12)?"PM":"AM";
     if(hour>12){
         return date;
     }else{
@@ -46,7 +51,7 @@ const QuestDetail = (props) => {
                 const detail = holder.detail;
             });
         }
-    },[holder]);
+    },[holder, props.refresh]);
 
 
     if(quests){
@@ -63,7 +68,7 @@ const QuestDetail = (props) => {
                     </View>
                 </View>
                 
-                <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}}>
+                <ScrollView style={styles.scroll} contentContainerStyle={{alignItems  :'center'}}>
                     {(quests.length)?<>{
                         quests.map((item,idx)=>{
                             return(<QuestView data={item} key={idx}/>);
@@ -121,6 +126,9 @@ const styles = StyleSheet.create({
         flex : 1,
         alignItems : 'center',
         justifyContent : 'center'
+    },
+    scroll : {
+        flex : 1,
     }
 
 });

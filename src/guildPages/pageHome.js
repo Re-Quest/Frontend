@@ -6,6 +6,7 @@ import axios from 'axios';
 import Title from './title';
 
 import IconSearch from '../../assets/icons/icon_search.svg';
+import GuildProfile from '../guildComponents/GuildProfile';
 
 
 const pageHome = (props) => {
@@ -43,6 +44,10 @@ const pageHome = (props) => {
             <View style={styles.box}>
                 <Title pageName="home" guildName={guildName}/>
                 <View style={styles.homepage}>
+                    <Text style={styles.titletxt}>Welcom To</Text>
+                    <Text style={styles.titletxt}>{guildName.toUpperCase()}</Text>
+                    <GuildProfile />
+
                     <View style={styles.holderWrapper}>
                         <Text style={styles.titletxt}>TEAMMATES</Text>
                         <View style={styles.search}>

@@ -9,15 +9,24 @@ import {QuestModal} from "../questComponents/QuestModal";
 
 const USER_URL = "http://192.249.18.141:80/api/auth/getOne?_id=" 
 const showDate = (data) => {
-    const date = data.split("T")[0];
-    const hour = parseInt(data.split("T")[1].split(":")[0]);
-    const min = parseInt(data.split("T")[1].split(":")[1]);
-    const time = (hour>=12)?"PM":"AM";
+    const tmp = new Date(data);
 
+    const date = tmp.getFullYear() + "-" +
+                ((tmp.getMonth()+1>9)?(tmp.getMonth()+1):'0'+(tmp.getMonth()+1)) + "-" +
+                ((tmp.getDate()>9)?tmp.getDate():'0'+tmp.getDate())
+
+    const hour = tmp.getHours();
+    const min = tmp.getMinutes();
+
+    const time = (hour>=12)?"PM":"AM";
     if(hour>12){
-        return date + "\n" + (hour-12) + ":" + min + time;
+        return date +"\n" + 
+            ((hour-12>9)?hour-12:('0'+hour-12)) +":"+
+            ((min>9)?min:('0'+min)) + time;
     }else{
-        return date + "\n" + hour + ":" + min + time;
+        return date +"\n" + 
+            ((hour>9)?hour:('0'+hour)) +":"+
+            ((min>9)?min:('0'+min)) + time;
     }
 }
 
@@ -66,7 +75,7 @@ const QuestView = (props) => {
         return(
             <View style={styles.questWrapper}>
                 <View style={styles.mainWrapper}>
-                    <View style={{marginRight:30}}>
+                    <View style={{width : 250}}>
                         <ScrollView horizontal={true} pagingEnabled={true}>
                             <Text style={styles.titletxt}>{title}</Text>
                         </ScrollView>
@@ -185,7 +194,7 @@ const styles = StyleSheet.create({
     },
     datetxt : {
         fontFamily : 'ReadexPro-Medium',
-        fontSize : 19,
+        fontSize : 17,
         color : colors.blue
     },
     comment_img : {

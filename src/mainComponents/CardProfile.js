@@ -9,7 +9,9 @@ const CardProfile = (props) => {
 
     // data
     const username = props.data.userId;
-    const position = "dummy";
+    // DUMMY
+    const position = 'student';
+    // DUMMY
     const phone = props.data.phone;
     const img = props.data.profileImg;
     const email = props.data.email;

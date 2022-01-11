@@ -1,54 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native';
-import * as Font from 'expo-font';
+import images from '../mainComponents/Images';
 
 import colors from '../../assets/colors/colors';
 
 const MyProfile = (props) =>{
 
-    // Font loading
-    const [isReady, setIsReady] = useState(false);
-
-    const loadFont = async() => {
-        await Font.loadAsync({
-            'ReadexPro-Bold' : require('../../assets/fonts/ReadexPro-Bold.ttf'),
-            'ReadexPro-Medium' : require('../../assets/fonts/ReadexPro-Medium.ttf'),
-            'ReadexPro-Regular' : require('../../assets/fonts/ReadexPro-Regular.ttf')
-        })
-        setIsReady(true);
-    };
-    useEffect(()=>{
-        loadFont();
-    },[]);
 
     // Data
     const data = props.userToken;
-    const img = 0;
-    let check = "../../assets/images/img_"+img+".png";
-    const url = "../../assets/images/img_0.png"
 
-    const test = () =>{
-        console.log(typeof(img));
-        console.log("hi"+img+"hi");
-
-    };
-    
-    
-
-        /*
-    "email": "hyewon0809@kaist.ac.kr",
-    "guildInfo": Array [],
-    "phone": "010-9021-0167",
-    "profileImg": 0,
-    "teamInfo": Array [],
-    "userId": "hyewon",
-    "username": "HyewonLee",
-    */
-
-    if(isReady){
+    if(data){
         return(
             <View style={styles.profileWrapper}>
-                <Image style={styles.profileImg} source={require(check)}/>
+                <Image style={styles.profileImg} source={images.profile[data.profileImg]}/>
                 <View style={styles.textWrapper}>
 
                     <View style={styles.maintxtWrapper}>
