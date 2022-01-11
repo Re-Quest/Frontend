@@ -35,15 +35,18 @@ export const QuestModal= (props)=> {
 		if(showComment){ // re:quest
 			const data = {
 				_id : questId,
+				title : props.questJson.title,
 				comment : comment,
-				receiver : props.questJson.heldUser,
-				dueDate : date
+				receiver : props.questJson.heldUser._id,
+				dueDate : new Date(date),
 			};
-			axios.post("http://192.249.18.141:80/api/quest/reqest",data)
+			console.log(data);
+			axios.post("http://192.249.18.141:80/api/quest/request",data)
 			.then((res)=>{
+				console.log('success');
 				props.setModalVisible(false);
 				props.setRefresh(val=>!val);
-			});
+			}).catch((e)=>console.log(e));
 
 		}else if(props.questJson.state === "confirm"){// complete
 			console.log(comment);
