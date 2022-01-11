@@ -74,7 +74,7 @@ const PageQuest = (props) => {
         );
 
     }else{
-        return(<Text>wait</Text>);
+        return(<Text></Text>);
     }
 
 

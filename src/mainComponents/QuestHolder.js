@@ -123,7 +123,7 @@ const QuestHolder = (props) => {
         );
 
     }else{
-        return(<Text>stay..</Text>);
+        return(<Text></Text>);
     }
 
 

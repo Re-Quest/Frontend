@@ -80,7 +80,7 @@ const QuestDetail = (props) => {
             </View>
         );
     }else{
-        return(<Text>stay</Text>);
+        return(<Text></Text>);
     }
 
 };

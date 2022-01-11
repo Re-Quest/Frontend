@@ -124,7 +124,7 @@ const QuestView = (props) => {
         );
 
     }else{
-        return(<Text>stay</Text>);
+        return(<Text></Text>);
     }
 
 
