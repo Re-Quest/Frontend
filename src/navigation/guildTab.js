@@ -34,7 +34,7 @@ const GuildTab = (props) => {
             <Tab.Screen name="Home" children={()=><PageHome refresh={refresh} userToken={props.userToken}/>} options={homeoptions}/>
             <Tab.Screen name="New" children={()=><QuestNavigator refresh={refresh} setRefresh={setRefresh} userToken={props.userToken}/>} options={newoptions}/>
             <Tab.Screen name="Quest" children={()=><PageQuest refresh={refresh} userToken={props.userToken}/>} options={questoptions}/>
-            <Tab.Screen name="My" children={()=><PageMy  userToken={props.userToken}/>} options={myoptions}/>
+            <Tab.Screen name="My" children={()=><PageMy  refresh={refresh} userToken={props.userToken}/>} options={myoptions}/>
         </Tab.Navigator>
     );
 };

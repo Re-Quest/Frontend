@@ -1,39 +1,38 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import {WebView} from 'react-native-webview';
 import images from '../mainComponents/Images';
 
 import colors from '../../assets/colors/colors';
 
-const MyProfile = (props) =>{
+const GuildProfile = () =>{
+    const teamInfo = ['hi','hello'];
+    const [loading, setLoading] = useState(true);
 
-
-    // Data
-    const data = props.userToken;
-
-    if(data){
-        return(
+    return(
+        <View>
             <View style={styles.profileWrapper}>
-                <Image style={styles.profileImg} source={images.profile[data.profileImg]}/>
+                <Image style={styles.profileImg} source={images.profile[3]}/>
                 <View style={styles.textWrapper}>
 
                     <View style={styles.maintxtWrapper}>
                         <View style={styles.textlineWrapper}>
-                            <Text style={styles.titletxt}>{data.userId.toUpperCase()}</Text>
+                            <Text style={styles.titletxt}>MADCAMP</Text>
                             <TouchableOpacity style={styles.editWrapper} onPress={()=>test()}>
                                 <Text style={styles.edittxt}>Edit</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.titlemid}>{data.guildInfo[0].posInGuild.toUpperCase()}</Text>
+                        <Text style={styles.titlemid}>student</Text>
                     </View>
                     
                     <View style={styles.subtxtWrapper}>
-                        <Text style={styles.titlesub}>{data.email}</Text>
-                        <Text style={styles.titlesub}>{data.phone}</Text>
+                        <Text style={styles.titlesub}>detail1</Text>
+                        <Text style={styles.titlesub}>detail2</Text>
                     </View>
 
                     <View style={styles.teamsWrapper}>
                         <ScrollView style={styles.scrollview} horizontal={true} pagingEnabled={true} >
-                            {data.teamInfo.map((val, idx)=>{
+                            {teamInfo.map((val, idx)=>{
                                 return(
                                     <View style={styles.teamItemWrapper} key={idx}>
                                         <Text style={styles.teamItemName}>{val}</Text>
@@ -46,16 +45,16 @@ const MyProfile = (props) =>{
                     
                 </View>
             </View>
-        );
-    }else{
-        return(<Text>Loading...</Text>);
-    }
+
+        </View>
+
+    );
 
 };
 
 const styles = StyleSheet.create({
     profileWrapper : {
-        width : '90%',
+        width : '100%',
         height : 150,
         flexDirection : 'row',
         borderRadius : 20,
@@ -63,14 +62,7 @@ const styles = StyleSheet.create({
         justifyContent : 'flex-start',
         alignItems : 'center',
 
-        marginHorizontal : '5%',
         shadowColor : colors.light_gray,
-        shadowOffset : {
-            width : 1,
-            height : 1
-        },
-        shadowOpacity : 1,
-        shadowRadius : 20,
         elevation : 10
     },
     profileImg : {
@@ -144,4 +136,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MyProfile;
+export default GuildProfile;

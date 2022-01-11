@@ -25,7 +25,7 @@ const SignIn = (props) => {
                 props.setUserToken(null);
             }else{
                 let data = res.data;
-                data.teamInfo = ['CLASSA','CLASSB','FRONTEND','DESIGNER'];
+                data.teamInfo = ['react-native','nodejs','mongodb','koa'];
                 data.guildInfo = [{
                     guildId : 'madcamp',
                     posInGuild : 'student'

@@ -10,12 +10,13 @@ const ScrollQuest = (props) => {
     const [data, setData] = useState(null);
 
     useEffect(()=>{
+        setSwipeTitle('INVENTORY');
         setData(null);
         axios.get("http://192.249.18.141:80/api/quest/userQuests")
         .then((res)=>setData(res.data));
     },[props.refresh]);
 
-    const [swipeTitle, setSwipeTitle] = useState('QUESTED');
+    const [swipeTitle, setSwipeTitle] = useState('INVENTORY');
 
     const handleSwipe = (idx) => {
         if(idx===0){
@@ -32,13 +33,12 @@ const ScrollQuest = (props) => {
     };
 
     if(data){
-        console.log(data);
         return(
             <View style={styles.swiperWrapper}>
                 <Text style={styles.title} >{swipeTitle}</Text>
                 <Swiper loop={false} index={1} paginationStyle={pagination} onIndexChanged={(idx)=>handleSwipe(idx)} >
                     <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
-                        <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}} horizontal={false} overScrollMode="never">
+                        <ScrollView style={{flex:1}} contentContainerStyle={{alignItems : 'center'}} horizontal={false} overScrollMode="never">
                             {(data.generated.length)?<>{
                                 data.generated.map((item,idx)=>{
                                     return(<QuestView data={item} key={idx}/>);
@@ -49,9 +49,9 @@ const ScrollQuest = (props) => {
                         </ScrollView>
                     </View>
                     <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
-                        <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}} horizontal={false} overScrollMode="never">
-                            {(data.sent.length)?<>{
-                                data.sent.map((item,idx)=>{
+                        <ScrollView style={{flex:1, }}contentContainerStyle={{alignItems : 'center',justifyContent:'center'}} horizontal={false} overScrollMode="never">
+                            {(data.received.length)?<>{
+                                data.received.map((item,idx)=>{
                                     return(<QuestView data={item} key={idx}/>);
                                 })
                             }</>:(<View style={styles.emptyWrapper}>
@@ -60,9 +60,9 @@ const ScrollQuest = (props) => {
                         </ScrollView>
                     </View>
                     <View style={{width : '100%', height : '100%',paddingHorizontal:'1%'}}>
-                        <ScrollView contentContainerStyle={{alignItems : 'center',flex:1}} horizontal={false} overScrollMode="never">
-                            {(data.received.length)?<>{
-                                data.received.map((item,idx)=>{
+                        <ScrollView style={{flex:1}} contentContainerStyle={{alignItems : 'center'}} horizontal={false} overScrollMode="never">
+                            {(data.sent.length)?<>{
+                                data.sent.map((item,idx)=>{
                                     return(<QuestView data={item} key={idx}/>);
                                 })
                             }</>:(<View style={styles.emptyWrapper}>
@@ -106,9 +106,11 @@ const styles = StyleSheet.create({
 
     },
     emptyWrapper : {
+        marginVertical : '40%',
         height : '100%',
+        width : '100%',
         flex : 1,
         alignItems : 'center',
-        justifyContent : 'center'
+        justifyContent : 'center',
     }
 });

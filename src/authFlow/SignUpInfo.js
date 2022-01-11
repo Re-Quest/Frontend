@@ -12,16 +12,17 @@ const SignUpInfo = (props) =>{
     const URL_SIGN_UP = "http://192.249.18.141:80/api/auth/register";
 
     const [ img, setImg ] = useState(0);
-    const [ position, setPosition ] = useState('');
 
     const signup = () => {
-        let data = props.setRegister;
-        data.guildInfo = [{guildId : "madcamp", posInGuild : position}];
-        data.teamInfo = ['REACT-NATIVE','KOA','MONGODB'];
+        let data = props.register;
         data.profileImg = img;
+
+        console.log(data);
+
         axios.post(URL_SIGN_UP, data).then((res)=>{
             console.log(res);
             props.setRegister(null);
+            props.navigation.pop();
             props.navigation.pop();
         });
     };
@@ -70,7 +71,7 @@ const SignUpInfo = (props) =>{
                         <TextInput style={styles.default} defaultValue='MadCamp' editable={false} selectionColor={colors.blue} />
                     </View>
                     <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Position" onChangeText={(val) => setPosition(val)} selectionColor={colors.blue} />
+                        <TextInput style={styles.default} defaultValue='Participant' editable={false} selectionColor={colors.blue} />
                     </View>
 
                 </View>

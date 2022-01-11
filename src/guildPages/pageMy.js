@@ -8,6 +8,7 @@ import Title from './title';
 const pageMy = (props) => {
     const guildName = props.userToken.guildInfo[0].guildId;
 
+
     /*
     "email": "hyewon0809@kaist.ac.kr",
     "guildInfo": Array [],
