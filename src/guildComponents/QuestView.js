@@ -98,7 +98,7 @@ const QuestView = (props) => {
                     <View style={styles.txtbox}>
                         <Text style={styles.txt}>{receiverId.toUpperCase()}</Text>
                     </View>
-    
+
                 </View>
     
                 <View style={styles.subWrapper}>

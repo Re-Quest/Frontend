@@ -1,14 +1,18 @@
 
 import React, {useState} from 'react';
-import {View, Button, Platform, Pressable, TouchableOpacity, TextInput, Text, Image, Dimensions, Modal} from 'react-native';
+import {View, Alert, Button, Platform,StatusBar, Pressable, TouchableOpacity, TextInput, Text, Image, Dimensions, Modal, ScrollView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {StyleSheet} from "react-native";
 import Refresh from "../../assets/refresh.png";
+import colors from '../../assets/colors/colors';
+import Images from '../mainComponents/Images';
+import axios from 'axios';
 
 export const QuestModal= (props)=> {
 	const [date, setDate] = useState(new Date(props.questJson.dueDate));
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios');
 	const [showTime, setShowTime] = useState(Platform.OS === 'ios');
+	const [comment, setComment] = useState(null);
 
 	const onChange = (event, selectedDate) => {
 		const currentDate = selectedDate || date;
@@ -18,11 +22,61 @@ export const QuestModal= (props)=> {
 		setDate(currentDate);
 	};
 
-	const [buttonList, setButtonList] = useState([
+	const apply = () =>{
+		if(comment === null || comment.length === 0){
+			Alert.alert('write a comment');
+			return;
+		}
+
+		const questId = props.questJson._id;
+		console.log('apply');
+
+		if(showComment){ // re:quest
+			const data = {
+				_id : questId,
+				comment : comment,
+				receiver : props.questJson.heldUser,
+				dueDate : date
+			};
+			axios.post("http://192.249.18.141:80/api/quest/reqest",data)
+			.then((res)=>{
+
+			});
+
+		}else if(props.questJson.state === "confirm"){// complete
+			console.log(comment);
+			axios.post("http://192.249.18.141:80/api/quest/complete",{_id : questId, comment : comment})
+			.then((res)=>{
+				props.setModalVisible(false);
+			});
+		}else if(props.questJson.state === "complete"){//terminate
+			axios.post("http://192.249.18.141:80/api/quest/terminate",{_id : questId, comment : comment})
+			.then((res)=>{
+				props.setModalVisible(false);
+			});
+
+		}else{//confirm
+			console.log('confirm');
+			console.log(questId);
+			axios.post("http://192.249.18.141:80/api/quest/confirm",{_id : questId, comment : comment})
+			.then((res)=>{
+				props.setModalVisible(false);
+			})
+			.catch((e)=>console.log(e));
+		}
+	};
+
+
+	const normal = [
 		{name:"Re:Quest", key:1, selected:false},
-		{name:"On Progress", key:2, selected:false},
+		{name:(props.questJson.state!=="confirm")?"Confirm":"Complete", key:2, selected:false},
+	];
+	const complete = [
+		{name:"Re:Quest", key:1, selected:false},
 		{name:"Terminate", key:3, selected:false}
-	]);
+	];
+
+	const [buttonList, setButtonList] = useState((props.questJson.state!=="complete")?normal:complete);
 
 	//if 'Re:Quest' selected, show comment text input. else, hide it.
 	const [showComment, setShowComment] = useState(false);
@@ -43,19 +97,23 @@ export const QuestModal= (props)=> {
 				}}
 			>
 				<TouchableOpacity style={styles.background} onPress={() => props.setModalVisible(false)}/>
-				<View style={styles.centeredView}>
-					<View style={styles.modal}>
-						<Text style={styles.titleText}>QUEST</Text>
-
-						<View style={styles.horizontalHolder}>
-							<View style={styles.textBasic}>
-								<Text>{props.questJson.heldUser.userId}</Text>
+				
+				<View style={styles.modalWrapper}>
+						<ScrollView style={{width : '100%', height : 50}} horizontal={true}>
+							<Text style={styles.titletxt}>{"["+props.questJson.title+"]"}</Text>
+						</ScrollView>
+						
+						<View style={styles.midWrapper}>
+							<View style={styles.txtbox}>
+								<Text style={styles.txt}>{props.questJson.heldUser.userId.toUpperCase()}</Text>
 							</View>
-							<Text style={styles.textNoBackground}>></Text>
-							<View style={styles.textBasic}>
-								<Text>{props.questJson.holdingUser.userId}</Text>
+							<View>
+								<Text style={styles.midtxt}>{`>`}</Text>
 							</View>
-						</View>
+							<View style={styles.txtbox}>
+								<Text style={styles.txt}>{props.questJson.holdingUser.userId.toUpperCase()}</Text>
+							</View>
+                		</View>
 
 						<>
 							{Platform.OS != 'ios' && (
@@ -74,8 +132,6 @@ export const QuestModal= (props)=> {
 								</View>
 							)}
 						</>
-
-
 						<View style={styles.horizontalHolderSpaceBetween}>
 							<>
 								{showTime && (
@@ -109,29 +165,37 @@ export const QuestModal= (props)=> {
 							</>
 						</View>
 
-						<View style={styles.horizontalHolderSpaceBetween}>
-							<TouchableOpacity style={styles.iconButton}>
-								<Text>+</Text>
-							</TouchableOpacity>
-							<Text style={styles.modalChildBasic}>LAST COMMENT</Text>
-						</View>
 
 
-						<View style={styles.horizontalHolderSpaceBetween}>
-							<View style={styles.commentHolder}>
-								<Text style={styles.modalChildBasic}>
-									{props.questJson.comments[props.questJson.comments.length - 1].comment}
-								</Text>
-							</View>
-							<Image style={styles.roundImage} source={Refresh}/>
-						</View>
+						<ScrollView style={{width : '100%', marginVertical : 5}}>
+							{props.questJson.comments.map((item, idx)=>{
+								const comment = item.comment;
+								const state = item.stateChange;
+								const date = new Date(item.date);
+								const user = item.user.userId;
+								const usernum = item.user.profileImg;
+
+								return(
+									<View style={styles.commentWrapper} key={idx}>
+										<Image style={styles.userImg} source={Images.profile[usernum]} />
+										<View style={styles.userWrapper}>
+											<Text style={styles.midtxt} >{user}</Text>
+											<Text style={styles.subtxt} >{state}</Text>
+											<Text style={styles.commenttxt}>{comment}</Text>
+										</View>
+										
+									</View>
+								);
+							})}
+						</ScrollView>
+
 
 						<View style={styles.horizontalHolder}>
 							{
 								buttonList.map((index) => {
 									return (
 										<TouchableOpacity
-											style={styles.stateButton}
+											style={index.selected ? styles.ButtonSelected : styles.ButtonUnSelected}
 											key={index.key}
 											onPress={() => {
 												let prevState= [];
@@ -160,28 +224,20 @@ export const QuestModal= (props)=> {
 							}
 						</View>
 						<View style={{width:"100%", alignItems: "center"}}>
-							{showComment && (
-								<>
-									<TextInput
-										style={styles.commentText}
-										multiline={true}
-										placeholder="Comment Detail"
-									/>
-									<TouchableOpacity style={styles.modalChildBasic}>
-										<Text>Select Targets</Text>
-									</TouchableOpacity>
-								</>
-
-							)}
+							<TextInput
+								style={styles.commentText}
+								multiline={true}
+								placeholder="Comment Detail"
+								onChangeText={(val)=>setComment(val)}
+							/>
 						</View>
 
-						<TouchableOpacity
-							onPress={modified? () => null : () => props.setModalVisible(false)}>
+						<TouchableOpacity style={{width:"100%", alignItems: "center"}}
+							onPress={modified? () => {apply()} : () => props.setModalVisible(false)}>
 							<Text style={styles.doneText}>
 								{modified? "Apply":"Close"}
 							</Text>
 						</TouchableOpacity>
-					</View>
 				</View>
 			</Modal>
 		</View>
@@ -189,28 +245,27 @@ export const QuestModal= (props)=> {
 };
 
 const styles = StyleSheet.create({
+
 	centeredView: {
 		position: 'absolute',
 		width: Dimensions.get('screen').width,
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 22
+		marginTop: (Platform.OS=='ios')?22:StatusBar.height
 	},
-	modalView: {
-		margin: 20,
-		backgroundColor: "white",
-		borderRadius: 20,
-		padding: 35,
-		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 5
+
+	modalWrapper : {
+		position: 'absolute',
+		width : '80%',
+		maxHeight : 400,
+		marginVertical : '25%',
+		marginHorizontal : '10%',
+		borderRadius : 20,
+		backgroundColor : colors.white,
+		flexDirection : 'column',
+		justifyContent : 'space-between',
+		padding : 20
 	},
 	button: {
 		borderRadius: 20,
@@ -259,29 +314,11 @@ const styles = StyleSheet.create({
 		marginTop: '20%',
 		backgroundColor: 'white',
 	},
-	doneText: {
-		color: 'rgb(1,123,255)',
-		fontSize: 15,
-		margin: 10
-	},
-	titleText: {
-		fontSize: 18,
-		margin: 10
-	},
-	commentText: {
-		borderRadius: 10,
-		padding: '3%',
-		minHeight: 60,
-		maxHeight: 300,
-		width: '90%',
-		textAlignVertical: 'top',
-		backgroundColor: '#CCCCCC'
-	},
 	horizontalHolder: {
-		width: '90%',
-		margin: '2%',
+		width: '100%',
 		flexDirection: 'row',
-		justifyContent: 'flex-start'
+		justifyContent: 'space-between',
+		alignItems : 'center'
 	},
 	horizontalHolderSpaceBetween: {
 		width: '90%',
@@ -290,13 +327,40 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: "center"
 	},
-	stateButton: {
-		borderRadius: 10,
-		backgroundColor: "#CCCCCC",
+
+
+	ButtonUnSelected: {
+		height : 24,
+        borderRadius : 12,
+        justifyContent : 'center',
+		backgroundColor: colors.cool_white,
 		paddingLeft: '3%',
 		paddingRight: '3%',
 		marginRight: '3%'
 	},
+	ButtonSelected: {
+		height : 24,
+        borderRadius : 12,
+        justifyContent : 'center',
+		backgroundColor: colors.blue,
+		paddingLeft: '3%',
+		paddingRight: '3%',
+		marginRight: '3%'
+	},
+	stateButtonSelected: {
+		paddingHorizontal : 7,
+		color: colors.white,
+		fontFamily : 'ReadexPro-Regular',
+		fontSize : 15
+	},
+	stateButtonUnSelected: {
+		paddingHorizontal : 7,
+		color: colors.gray,
+		fontFamily : 'ReadexPro-Regular',
+		fontSize : 15
+	},
+
+
 	iconButton: {
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -304,12 +368,6 @@ const styles = StyleSheet.create({
 		height: 20,
 		borderRadius: 10,
 		backgroundColor: "#CCCCCC",
-	},
-	stateButtonSelected: {
-		color: "#FFFFFF"
-	},
-	stateButtonUnSelected: {
-		color: "#999999"
 	},
 	textBasic: {
 		flex:1,
@@ -327,263 +385,88 @@ const styles = StyleSheet.create({
 		height: Dimensions.get('window').height,
 		width: Dimensions.get('window').width,
 		backgroundColor: 'rgba(0,0,0,0.5)'
-	}
+	},
+	detailHighlight : {
+        marginTop : -3,
+        fontSize : 17,
+        fontFamily : 'ReadexPro-Medium',
+        color : colors.blue,
+        marginHorizontal : 5
+    },
+
+	//text style
+	titletxt : {
+		width : '100%',
+        fontSize : 22,
+        fontFamily : 'ReadexPro-Bold',
+        color : colors.black,
+    },
+	midtxt : {
+        fontFamily : 'ReadexPro-Bold',
+        fontSize : 18,
+        color : colors.black,
+        marginHorizontal : 6
+    },
+    txt : {
+        fontFamily : 'ReadexPro-Regular',
+        fontSize : 15,
+        color : colors.white
+    },
+	commenttxt : {
+		fontFamily : 'ReadexPro-Regular',
+        fontSize : 15,
+        color : colors.black,
+		marginHorizontal : 6,
+		marginTop : -5,
+		width : '100%',
+	},
+	subtxt : {
+		fontFamily : 'ReadexPro-Regular',
+        fontSize : 15,
+        color : colors.gray,
+		marginHorizontal : 6,
+		marginTop : -5
+	},
+	doneText: {
+		color: colors.blue,
+		fontFamily : 'ReadexPro-Bold',
+		fontSize: 18,
+
+	},
+
+	////
+	midWrapper : {
+        flexDirection : 'row',
+        justifyContent : 'flex-start'
+    },
+	txtbox : {
+        height : 24,
+        borderRadius : 12,
+        paddingHorizontal : 10,
+        backgroundColor : colors.blue,
+        justifyContent : 'center'
+
+    },
+	commentWrapper : {
+		flexDirection : 'row',
+		backgroundColor : colors.cool_white,
+		width : '100%',
+		borderRadius : 20,
+		marginVertical : 5,
+		padding : 7
+	},
+	userWrapper : {
+		flex : 1,
+		flexDirection : 'column',
+		justifyContent : 'flex-start',
+		alignItems : 'flex-start',
+	},
+	userImg : {
+		width  : 40,
+		height : 40,
+		borderRadius : 20,
+		backgroundColor : colors.white
+	},
+
+    
 });
-//
-// 	return (
-// 		<>
-// 			{props.showQuest && (
-// 				<View  style={styles.container}>
-// 					<TouchableOpacity style={styles.background} onPress={props.setShowQuestFalse}/>
-// 					<View style={styles.modal}>
-// 						<Text style={styles.titleText}>QUEST</Text>
-//
-// 						<View style={styles.horizontalHolder}>
-// 							<View style={styles.textBasic}>
-// 								{/*<Text>{props.questJson.heldUser.userId}</Text>*/}
-// 							</View>
-// 							<Text style={styles.textNoBackground}>></Text>
-// 							<View style={styles.textBasic}>
-// 								{/*<Text>{props.questJson.holdingUser.userId}</Text>*/}
-// 							</View>
-// 						</View>
-//
-// 						<>
-// 							{Platform.OS != 'ios' && (
-// 								<View style={styles.horizontalHolderSpaceBetween}>
-// 									<TouchableOpacity
-// 										style={styles.textBasic}
-// 										onPress={() => setShowTime(true)}>
-// 										<Text>{date.toLocaleTimeString().substr(0,5)}</Text>
-// 									</TouchableOpacity>
-// 									<TouchableOpacity
-// 										style={styles.textBasic}
-// 										onPress={() => setShowDate(true)}>
-// 										<Text>{date.toLocaleDateString()}</Text>
-// 									</TouchableOpacity>
-// 									<Text>DUE: </Text>
-// 								</View>
-// 							)}
-// 						</>
-//
-//
-// 						<View style={styles.horizontalHolderSpaceBetween}>
-// 							<>
-// 								{showTime && (
-// 									<DateTimePicker
-// 										style={{height: 30, flex: 1}}
-// 										value={date}
-// 										mode='time'
-// 										is24Hour={true}
-// 										display="default"
-// 										onChange={onChange}
-// 									/>
-// 								)}
-//
-// 							</>
-// 							<>
-// 								{showDate && (
-// 									<DateTimePicker
-// 										style={{height: 30, flex: 1}}
-// 										value={date}
-// 										mode='date'
-// 										is24Hour={true}
-// 										display="default"
-// 										onChange={onChange}
-// 									/>
-// 								)}
-// 							</>
-// 							<>
-// 								{Platform.OS === 'ios' && (
-// 									<Text>DUE:</Text>
-// 								)}
-// 							</>
-// 						</View>
-//
-// 						<View style={styles.horizontalHolderSpaceBetween}>
-// 							<TouchableOpacity style={styles.iconButton}>
-// 								<Text>+</Text>
-// 							</TouchableOpacity>
-// 							<Text style={styles.modalChildBasic}>COMMENT</Text>
-// 						</View>
-//
-//
-// 						<View style={styles.horizontalHolderSpaceBetween}>
-// 							<View style={styles.commentHolder}></View>
-// 							<Image style={styles.roundImage} source={Refresh}/>
-// 						</View>
-//
-// 						<View style={styles.horizontalHolder}>
-// 							{
-// 								buttonList.map((index) => {
-// 									return (
-// 										<TouchableOpacity
-// 											style={styles.stateButton}
-// 											key={index.key}
-// 											onPress={() => {
-// 												let prevState= [];
-// 												for(let i of buttonList) {
-// 													if (i.key === index.key && !i.selected) {
-// 														prevState.push({name: i.name.toString(), selected: true, key: i.key});
-// 														setModified(true);
-// 														if (i.name === "Re:Quest")
-// 															setShowComment(true);
-// 														else setShowComment(false);
-// 													} else if (i.key === index.key && i.selected) {
-// 														prevState.push({name: i.name.toString(), selected: false, key: i.key});
-// 														setShowComment(false);
-// 														setModified(false);
-// 													} else prevState.push({name:i.name.toString(), selected:false ,key:i.key});
-// 												}
-// 												setButtonList(prevState);
-// 											}}
-// 										>
-// 											<Text style={index.selected ? styles.stateButtonSelected : styles.stateButtonUnSelected}>
-// 												{index.name.toString()}
-// 											</Text>
-// 										</TouchableOpacity>
-// 									)
-// 								})
-// 							}
-// 						</View>
-// 						<View style={{width:"100%", alignItems: "center"}}>
-// 							{showComment && (
-// 								<>
-// 									<TextInput
-// 										style={styles.commentText}
-// 			                            multiline={true}
-// 			                            placeholder="Comment Detail"
-// 									/>
-// 									<TouchableOpacity style={styles.modalChildBasic}>
-// 										<Text>Select Targets</Text>
-// 									</TouchableOpacity>
-// 								</>
-//
-// 							)}
-// 						</View>
-//
-// 						<TouchableOpacity
-// 							onPress={() => props.setShowQuest(!props.showQuest)}>
-// 							<Text style={styles.doneText}>
-// 								{modified? "Apply":"Close"}
-// 							</Text>
-// 						</TouchableOpacity>
-// 					</View>
-// 				</View>
-// 			)}
-// 		</>
-// 	);
-//
-//
-// };
-//
-// const styles = StyleSheet.create({
-// 	roundImage: {
-// 		width: 40,
-// 		height: 40,
-// 		borderRadius: 20,
-// 		backgroundColor: 'black',
-// 	},
-// 	commentHolder: {
-// 		backgroundColor: '#CCCCCC',
-// 		width: '95%',
-// 		marginLeft: '-10%',
-// 		borderRadius: 10,
-// 		height: 70
-// 	},
-// 	container: {
-// 		position: 'absolute',
-// 		height: '100%',
-// 		width: '100%',
-// 		backgroundColor: 'transparent',
-// 	},
-// 	modalChildBasic: {
-// 		width: '90%',
-// 		alignItems: 'flex-start',
-// 		padding: 2
-// 	},
-// 	background: {
-// 		position: Dimensions.get('window').position,
-// 		height: Dimensions.get('window').height,
-// 		width: Dimensions.get('window').width,
-// 		backgroundColor: 'rgba(0,0,0,0.5)'
-// 	},
-// 	ddayInput: {
-// 		backgroundColor: 'white',
-// 		marginBottom: 20,
-// 		width: '75%',
-// 		height: 40,
-// 		borderBottomWidth: 1,
-// 		borderBottomColor: '#a5a5a5'
-// 	},
-// 	modal: {
-// 		marginHorizontal: 20,
-// 		borderRadius: 10,
-// 		alignItems: 'center',
-// 		marginTop: '20%',
-// 		backgroundColor: 'white',
-// 	},
-// 	doneText: {
-// 		color: 'rgb(1,123,255)',
-// 		fontSize: 15,
-// 		margin: 10
-// 	},
-// 	titleText: {
-// 		fontSize: 18,
-// 		margin: 10
-// 	},
-// 	commentText: {
-// 		borderRadius: 10,
-// 		padding: '3%',
-// 		minHeight: 60,
-// 		maxHeight: 300,
-// 		width: '90%',
-// 		textAlignVertical: 'top',
-// 		backgroundColor: '#CCCCCC'
-// 	},
-// 	horizontalHolder: {
-// 		width: '90%',
-// 		margin: '2%',
-// 		flexDirection: 'row',
-// 		justifyContent: 'flex-start'
-// 	},
-// 	horizontalHolderSpaceBetween: {
-// 		width: '90%',
-// 		margin: 2,
-// 		flexDirection: 'row-reverse',
-// 		justifyContent: 'space-between',
-// 		alignItems: "center"
-// 	},
-// 	stateButton: {
-// 		borderRadius: 10,
-// 		backgroundColor: "#CCCCCC",
-// 		paddingLeft: '3%',
-// 		paddingRight: '3%',
-// 		marginRight: '3%'
-// 	},
-// 	iconButton: {
-// 		alignItems: 'center',
-// 		justifyContent: 'center',
-// 		width: 20,
-// 		height: 20,
-// 		borderRadius: 10,
-// 		backgroundColor: "#CCCCCC",
-// 	},
-// 	stateButtonSelected: {
-// 		color: "#FFFFFF"
-// 	},
-// 	stateButtonUnSelected: {
-// 		color: "#999999"
-// 	},
-// 	textBasic: {
-// 		flex:1,
-// 		backgroundColor: "#CCCCCC",
-// 		paddingHorizontal: "3%",
-// 		borderRadius: 30,
-// 		marginRight: '3%',
-// 		alignItems: 'center'
-// 	},
-// 	textNoBackground: {
-// 		marginRight: '3%'
-// 	}
-// });
