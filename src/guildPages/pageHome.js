@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
         alignItems : 'center'
     },
     holderWrapper : {
+        marginTop : 10,
         width : '100%',
         flexDirection : 'column',
         justifyContent : 'flex-start',

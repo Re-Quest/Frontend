@@ -24,7 +24,7 @@ const pageMy = (props) => {
         <View style={styles.box}>
             <Title guildName={guildName} pageName="my page" />
             <View style={styles.mypage}>
-                <MyProfile userToken={props.userToken}/>
+                <MyProfile userToken={props.userToken} setRefresh={props.setRefresh}/>
                 <View style={styles.questWrapper}>
                     <View style={styles.questBack}></View>
                     <SwipeQuest style={styles.questFront} position="hi" refresh={props.refresh}/>

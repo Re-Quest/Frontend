@@ -19,8 +19,8 @@ const MyProfile = (props) =>{
                     <View style={styles.maintxtWrapper}>
                         <View style={styles.textlineWrapper}>
                             <Text style={styles.titletxt}>{data.userId.toUpperCase()}</Text>
-                            <TouchableOpacity style={styles.editWrapper} onPress={()=>test()}>
-                                <Text style={styles.edittxt}>Edit</Text>
+                            <TouchableOpacity style={styles.editWrapper} onPress={()=>props.setRefresh((val)=>!val)}>
+                                <Text style={styles.edittxt}>refresh</Text>
                             </TouchableOpacity>
                         </View>
                         <Text style={styles.titlemid}>{data.guildInfo[0].posInGuild.toUpperCase()}</Text>
