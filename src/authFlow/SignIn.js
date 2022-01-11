@@ -14,6 +14,7 @@ import colors from '../../assets/colors/colors';
 
 import IconId from '../../assets/icons/icon_id.svg';
 import IconPw from '../../assets/icons/icon_pw.svg';
+import {QuestModal} from "../questComponents/QuestModal";
 
 
 

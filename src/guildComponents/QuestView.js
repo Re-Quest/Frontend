@@ -5,6 +5,7 @@ import React, {useState, useEffect} from 'react';
 
 import Images from '../mainComponents/Images';
 import axios from 'axios';
+import {QuestModal} from "../questComponents/QuestModal";
 
 const USER_URL = "http://192.249.18.141:80/api/auth/getOne?_id=" 
 const showDate = (data) => {
@@ -46,6 +47,11 @@ const showDate = (data) => {
     */
 
 const QuestView = (props) => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const setShowQuestFalse = () => {
+      setShowQuest(false);
+    }
 
     if(props.data){
 
@@ -67,7 +73,7 @@ const QuestView = (props) => {
                     </View>
 
                     <View>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>setModalVisible(true)}>
                             <Text style={styles.buttontxt}>+</Text>
                         </TouchableOpacity>
                     </View>
@@ -104,6 +110,7 @@ const QuestView = (props) => {
     
     
                 </View>
+                <QuestModal modalVisible={modalVisible} setModalVisible={setModalVisible} questJson={props.data}/>
             </View>
         );
 
