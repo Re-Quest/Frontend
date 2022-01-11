@@ -1,11 +1,11 @@
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../../assets/colors/colors';
 import IconBack from '../../assets/icons/icon_back.svg';
+import Images from '../mainComponents/Images';
 
 
 const Title = (props) => {
     
-    const imgurl = "../../assets/images/img_0.png"
 
     return(
         <View style={styles.titleWrapper}>
@@ -15,7 +15,7 @@ const Title = (props) => {
                         <IconBack style={{alignSelf : 'flex-start'}} fill={colors.blue} width={35} height={35} />
                     </TouchableOpacity>
                 </View>
-                :<Image style={styles.imgWrapper} source={require(imgurl)}/>
+                :<Image style={styles.imgWrapper} source={Images.quest[7]}/>
             }
             <View style={styles.txtWrapper} >
                 <Text style={styles.pagetxt} >{props.pageName.toUpperCase()}</Text>

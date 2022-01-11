@@ -44,8 +44,6 @@ const pageHome = (props) => {
             <View style={styles.box}>
                 <Title pageName="home" guildName={guildName}/>
                 <View style={styles.homepage}>
-                    <Text style={styles.titletxt}>Welcom To</Text>
-                    <Text style={styles.titletxt}>{guildName.toUpperCase()}</Text>
                     <GuildProfile />
 
                     <View style={styles.holderWrapper}>
@@ -65,7 +63,7 @@ const pageHome = (props) => {
     
         );
     }else{
-        return(<Text>loading</Text>);
+        return(<Text></Text>);
     }
 
 };
@@ -76,14 +74,15 @@ const styles = StyleSheet.create({
     box : {
         height : '100%',
         width : '100%',
+        backgroundColor : colors.white,
     },
     homepage : {
         flex : 1,
-        width : '100%',
+        width : '90%',
         height : '100%',
-        paddingHorizontal : '5%',
         paddingTop : '3%',
-        backgroundColor : colors.white,
+        marginHorizontal : '5%',
+
         alignItems : 'center'
     },
     holderWrapper : {

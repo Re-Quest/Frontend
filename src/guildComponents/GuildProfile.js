@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
+import { Linking, View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import LinkPreview from 'react-native-link-preview';
 import images from '../mainComponents/Images';
 
@@ -8,7 +8,7 @@ import colors from '../../assets/colors/colors';
 const GuildProfile = () =>{
     const teamInfo = ['hi','hello'];
     const [view, setView] = useState(null);
-    const URI = 'https://www.npmjs.com/package/react-native-link-preview'
+    const URI = 'https://github.com/Re-Quest/Frontend'
 
     useEffect(()=>{
         setView(null);
@@ -18,49 +18,42 @@ const GuildProfile = () =>{
 
     if(view){
         return(
-            <View>
+            <View style={{width : '100%'}}>
                 <View style={styles.profileWrapper}>
                     
                     <View style={styles.textWrapper}>
+                        <Text style={styles.maintxt}>CLASS-1</Text>
+                        <Text style={styles.maintxt}>TEAM RE:QUEST</Text>
     
-                        <View style={styles.maintxtWrapper}>
-                            <View style={styles.textlineWrapper}>
-                                <Text style={styles.titletxt}>MADCAMP</Text>
-                                <TouchableOpacity style={styles.editWrapper} onPress={()=>test()}>
-                                    <Text style={styles.edittxt}>Edit</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.titlemid}>student</Text>
-                        </View>
                         
                         <View style={styles.subtxtWrapper}>
-                            <Text style={styles.titlesub}>detail1</Text>
-                            <Text style={styles.titlesub}>detail2</Text>
-                        </View>
-    
-                        <View style={styles.teamsWrapper}>
-                            <ScrollView style={styles.scrollview} horizontal={true} pagingEnabled={true} >
-                                {teamInfo.map((val, idx)=>{
-                                    return(
-                                        <View style={styles.teamItemWrapper} key={idx}>
-                                            <Text style={styles.teamItemName}>{val}</Text>
-                                        </View>
-                                    );
-                                })}
-                            </ScrollView>
-                        </View>
-    
-                        
-                    </View>
-                </View>
-    
-                <View>            
-                    <Image resizeMode={'cover'}  style={{width: 50, height: 50}} source={{uri : view.images[0]}}/>
-                    <Text>{view.title}</Text>
-                    <Text>{view.description}</Text>
-                    <Text>{view.url}</Text>
-                </View>
 
+                            <View style={styles.teamItemWrapper}>
+                                <Text style={styles.teamItemName}>Eunho Jung</Text>
+                            </View>
+                            <View style={styles.teamItemWrapper}>
+                                <Text style={styles.teamItemName}>Hyewon Lee</Text>
+                            </View>
+                        </View>
+    
+                    </View>
+                    <Text style={styles.maintxt}>WEBSITE</Text>
+                    <TouchableOpacity style={{width : '100%', paddingHorizontal : '5%'}} onPress={()=>Linking.openURL(URI)}>
+                        <View style={styles.webWrapper}>
+                            <View style={styles.title}>
+                                <Text style={styles.titletxt}>{view.title.split(":")[0]}</Text>
+                                <Text style={styles.titlesub}>{":"+view.title.split(":")[1]}</Text>
+                            </View>            
+
+                            <View style={styles.webtxt}>
+                                <Image resizeMode={'cover'}  style={{width: 160, height: 80, margin : 15}} source={{uri : view.images[0]}}/>
+                                <Text style={styles.subtxt}>{view.description.substr(0,110) + "  ---"}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+
+
+                </View>
             </View>
         );
 
@@ -74,86 +67,84 @@ const GuildProfile = () =>{
 const styles = StyleSheet.create({
     profileWrapper : {
         width : '100%',
-        height : 150,
-        flexDirection : 'row',
+        flexDirection : 'column',
         borderRadius : 20,
         backgroundColor : colors.white,
         justifyContent : 'flex-start',
         alignItems : 'center',
 
+        paddingHorizontal : 10,
+
+
         shadowColor : colors.light_gray,
         elevation : 10
     },
-    profileImg : {
-        width : 100,
-        height : 100,
-        borderRadius : 50,
-        margin : 20,
-        flex : 1,
-        backgroundColor : colors.white,
-        resizeMode : 'contain'
-    },
-    textWrapper : {
-        height : '100%',
+    webWrapper : {
         width : '100%',
-        flex : 2,
         flexDirection : 'column',
-        justifyContent : 'space-evenly',
-        marginRight : 30,
-    },
-    textlineWrapper : {
-        flexDirection : 'row',
-        justifyContent : 'space-between',
+        justifyContent : 'flex-start',
         alignItems : 'center'
     },
-    titletxt : {
-        fontFamily : 'ReadexPro-Bold',
-        fontSize : 20
+    webtxt : {
+        width :"100%",
+        flexDirection : 'row',
+        justifyContent : 'flex-start',
+        alignItems : 'flex-start'
     },
-    titlemid : {
-        fontFamily : 'ReadexPro-Bold',
-        fontSize : 15,
-        color : colors.blue
+    title :{
+        alignSelf : 'flex-start'
+    },
+    titletxt : {
+        fontFamily : 'ReadexPro-Medium',
+        fontSize : 17,
+        color : colors.black,
     },
     titlesub : {
         fontFamily : 'ReadexPro-Medium',
         fontSize : 15,
-        color : colors.gray
+        color : colors.black,
+        marginTop : -5
     },
-    editWrapper : {
-    },  
-    edittxt : {
+    subtxt : {
+        flex : 1,
         fontFamily : 'ReadexPro-Regular',
-        fontSize : 12,
-        color : colors.blue
-    },
-    maintxtWrapper : {
+        fontSize : 15,
+        color : colors.gray,
+        marginTop : -5
 
     },
-    subtxtWrapper : {
+    maintxt : {
+        fontSize : 20,
+        fontFamily : 'ReadexPro-Bold',
+        color : colors.black,
+        alignSelf :'flex-start',
+        marginLeft : 10,
+        marginTop : 10,
 
     },
-    teamsWrapper : {
-        width : '100%',
-        height : 25,
+    textWrapper : {
+        width : '100%'
     },
     teamItemWrapper : {
         backgroundColor : colors.blue,
-        height : 22,
-        borderRadius : 11,
+        height : 26,
+        borderRadius : 13,
         alignItems : 'center',
         justifyContent : 'center',
-        marginRight : 4,
+        marginHorizontal : 5
+
     },
     teamItemName : {
         fontFamily : 'ReadexPro-Medium',
-        fontSize : 13,
-        marginHorizontal : 10,
+        fontSize : 16,
+        marginHorizontal : 15,
         color : colors.white
     },
-    scrollview : {
-        backgroundColor : null
+    subtxtWrapper : {
+        flexDirection : 'row'
     }
+
+
 });
 
 export default GuildProfile;
