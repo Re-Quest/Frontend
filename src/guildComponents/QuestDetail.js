@@ -51,7 +51,7 @@ const QuestDetail = (props) => {
                 const detail = holder.detail;
             });
         }
-    },[holder, props.refresh]);
+    },[holder, props.apply]);
 
 
     if(quests){
@@ -71,7 +71,7 @@ const QuestDetail = (props) => {
                 <ScrollView style={styles.scroll} contentContainerStyle={{alignItems  :'center'}}>
                     {(quests.length)?<>{
                         quests.map((item,idx)=>{
-                            return(<QuestView data={item} key={idx}/>);
+                            return(<QuestView data={item} key={idx} setApply={props.setApply}/>);
                         })
                     }</>:(<View style={styles.emptyWrapper}>
                         <Text style={styles.empty}>No Quest</Text>

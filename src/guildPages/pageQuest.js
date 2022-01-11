@@ -13,6 +13,8 @@ const PageQuest = (props) => {
     const [filterList, setFilterList] = useState(null);
     const [selectHolder, setSelectHolder] = useState(null);
 
+    const [apply, setApply] = useState(false);
+
     useEffect(()=>{
         // to refresh the page initialize the data
         setFilterList(null);
@@ -22,7 +24,7 @@ const PageQuest = (props) => {
             setFilterList(res.data);
             setSelectHolder(res.data[0]);
         });
-    },[props.refresh]);
+    },[props.refresh, apply]);
 
     const setFilter = (val) =>{
         if(!(typeof(val)==='string') || val.length===0){
@@ -64,7 +66,7 @@ const PageQuest = (props) => {
                             })}            
                         </ScrollView>
                     </View>
-                    <QuestDetail data={selectHolder}/>
+                    <QuestDetail data={selectHolder} apply={apply} setApply={setApply}/>
                         
                 </View>
             </View>

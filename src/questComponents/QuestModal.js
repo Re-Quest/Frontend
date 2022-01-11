@@ -7,6 +7,7 @@ import Refresh from "../../assets/refresh.png";
 import colors from '../../assets/colors/colors';
 import Images from '../mainComponents/Images';
 import axios from 'axios';
+import { useEffect } from 'react/cjs/react.development';
 
 export const QuestModal= (props)=> {
 	const [date, setDate] = useState(new Date(props.questJson.dueDate));
@@ -40,7 +41,8 @@ export const QuestModal= (props)=> {
 			};
 			axios.post("http://192.249.18.141:80/api/quest/reqest",data)
 			.then((res)=>{
-
+				props.setModalVisible(false);
+				props.setRefresh(val=>!val);
 			});
 
 		}else if(props.questJson.state === "confirm"){// complete
@@ -48,11 +50,13 @@ export const QuestModal= (props)=> {
 			axios.post("http://192.249.18.141:80/api/quest/complete",{_id : questId, comment : comment})
 			.then((res)=>{
 				props.setModalVisible(false);
+				props.setRefresh(val=>!val);
 			});
 		}else if(props.questJson.state === "complete"){//terminate
 			axios.post("http://192.249.18.141:80/api/quest/terminate",{_id : questId, comment : comment})
 			.then((res)=>{
 				props.setModalVisible(false);
+				props.setRefresh(val=>!val);
 			});
 
 		}else{//confirm
@@ -61,6 +65,7 @@ export const QuestModal= (props)=> {
 			axios.post("http://192.249.18.141:80/api/quest/confirm",{_id : questId, comment : comment})
 			.then((res)=>{
 				props.setModalVisible(false);
+				props.setRefresh(val=>!val);
 			})
 			.catch((e)=>console.log(e));
 		}
@@ -85,6 +90,16 @@ export const QuestModal= (props)=> {
 	//else, set last button to Close.
 	const [modified, setModified] = useState(false);
 
+	useEffect(()=>{
+		if(props.questJson.state==="terminate"){
+			setButtonList([]);
+		}else{
+			setButtonList((props.questJson.state!=="complete")?normal:complete);
+		}
+		
+
+
+	},[props.data]);
 
 	return (
 		<View style={styles.centeredView}>

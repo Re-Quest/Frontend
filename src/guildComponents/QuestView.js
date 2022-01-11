@@ -58,9 +58,9 @@ const showDate = (data) => {
 const QuestView = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const setShowQuestFalse = () => {
-      setShowQuest(false);
-    }
+    useEffect(()=>{
+        if(!modalVisible)props.setApply(val=>!val);
+    },[modalVisible])
 
     if(props.data){
 
