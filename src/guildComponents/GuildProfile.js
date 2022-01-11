@@ -1,54 +1,73 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
-import {WebView} from 'react-native-webview';
+import LinkPreview from 'react-native-link-preview';
 import images from '../mainComponents/Images';
 
 import colors from '../../assets/colors/colors';
 
 const GuildProfile = () =>{
     const teamInfo = ['hi','hello'];
-    const [loading, setLoading] = useState(true);
+    const [view, setView] = useState(null);
+    const URI = 'https://www.npmjs.com/package/react-native-link-preview'
 
-    return(
-        <View>
-            <View style={styles.profileWrapper}>
-                <Image style={styles.profileImg} source={images.profile[3]}/>
-                <View style={styles.textWrapper}>
+    useEffect(()=>{
+        setView(null);
+        LinkPreview.getPreview(URI)
+        .then((res) => setView(res));
+    },[]);
 
-                    <View style={styles.maintxtWrapper}>
-                        <View style={styles.textlineWrapper}>
-                            <Text style={styles.titletxt}>MADCAMP</Text>
-                            <TouchableOpacity style={styles.editWrapper} onPress={()=>test()}>
-                                <Text style={styles.edittxt}>Edit</Text>
-                            </TouchableOpacity>
+    if(view){
+        return(
+            <View>
+                <View style={styles.profileWrapper}>
+                    
+                    <View style={styles.textWrapper}>
+    
+                        <View style={styles.maintxtWrapper}>
+                            <View style={styles.textlineWrapper}>
+                                <Text style={styles.titletxt}>MADCAMP</Text>
+                                <TouchableOpacity style={styles.editWrapper} onPress={()=>test()}>
+                                    <Text style={styles.edittxt}>Edit</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.titlemid}>student</Text>
                         </View>
-                        <Text style={styles.titlemid}>student</Text>
+                        
+                        <View style={styles.subtxtWrapper}>
+                            <Text style={styles.titlesub}>detail1</Text>
+                            <Text style={styles.titlesub}>detail2</Text>
+                        </View>
+    
+                        <View style={styles.teamsWrapper}>
+                            <ScrollView style={styles.scrollview} horizontal={true} pagingEnabled={true} >
+                                {teamInfo.map((val, idx)=>{
+                                    return(
+                                        <View style={styles.teamItemWrapper} key={idx}>
+                                            <Text style={styles.teamItemName}>{val}</Text>
+                                        </View>
+                                    );
+                                })}
+                            </ScrollView>
+                        </View>
+    
+                        
                     </View>
-                    
-                    <View style={styles.subtxtWrapper}>
-                        <Text style={styles.titlesub}>detail1</Text>
-                        <Text style={styles.titlesub}>detail2</Text>
-                    </View>
-
-                    <View style={styles.teamsWrapper}>
-                        <ScrollView style={styles.scrollview} horizontal={true} pagingEnabled={true} >
-                            {teamInfo.map((val, idx)=>{
-                                return(
-                                    <View style={styles.teamItemWrapper} key={idx}>
-                                        <Text style={styles.teamItemName}>{val}</Text>
-                                    </View>
-                                );
-                            })}
-                        </ScrollView>
-                    </View>
-
-                    
                 </View>
+    
+                <View>            
+                    <Image resizeMode={'cover'}  style={{width: 50, height: 50}} source={{uri : view.images[0]}}/>
+                    <Text>{view.title}</Text>
+                    <Text>{view.description}</Text>
+                    <Text>{view.url}</Text>
+                </View>
+
             </View>
+        );
 
-        </View>
+    }else{
+        return(<></>);
+    }
 
-    );
 
 };
 
@@ -71,7 +90,8 @@ const styles = StyleSheet.create({
         borderRadius : 50,
         margin : 20,
         flex : 1,
-        backgroundColor : colors.white
+        backgroundColor : colors.white,
+        resizeMode : 'contain'
     },
     textWrapper : {
         height : '100%',
