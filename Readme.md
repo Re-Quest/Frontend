@@ -12,6 +12,8 @@ Re:Quest는 - Quest를 통해 필요한 것을 요청하는 Task Management Tool
 
 ![로그인 화면](./readmeImgs/signin.PNG) ![회원가입 화면](./readmeImgs/signup.PNG)
 
+![](./readmeImgs/tab1.PNG)
+
 Guild 내에서 업무 단위, 또는 이벤트 단위별로 “Quest Holder”를 생성할 수 있고,
 
 각 개인이 Quest Holder에 종속된 Quest를 생성하여 다른 User에게 특정 작업을 요청할 수 있습니다.
