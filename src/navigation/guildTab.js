@@ -33,14 +33,14 @@ const GuildTab = (props) => {
 
     return(
         <>
-            <StatusBar barStyle="white-content"/>
+            <StatusBar barStyle='dark-content' backgroundColor='white'/>
             <SafeAreaView style={{flex:1, backgroundColor:'white'}}>
-              <Tab.Navigator style={styles.component} screenOptions={navoptions}>
-                  <Tab.Screen name="Home" children={()=><PageHome refresh={refresh} userToken={props.userToken}/>} options={homeoptions}/>
-                  <Tab.Screen name="New" children={()=><QuestNavigator refresh={refresh} setRefresh={setRefresh} userToken={props.userToken}/>} options={newoptions}/>
-                  <Tab.Screen name="Quest" children={()=><PageQuest refresh={refresh} userToken={props.userToken}/>} options={questoptions}/>
-                  <Tab.Screen name="My" children={()=><PageMy  refresh={refresh} userToken={props.userToken}/>} options={myoptions}/>
-              </Tab.Navigator>
+                <Tab.Navigator style={styles.component} screenOptions={navoptions}>
+                    <Tab.Screen name="Home" children={()=><PageHome refresh={refresh} userToken={props.userToken}/>} options={homeoptions}/>
+                    <Tab.Screen name="New" children={()=><QuestNavigator refresh={refresh} setRefresh={setRefresh} userToken={props.userToken}/>} options={newoptions}/>
+                    <Tab.Screen name="Quest" children={()=><PageQuest refresh={refresh} userToken={props.userToken}/>} options={questoptions}/>
+                    <Tab.Screen name="My" children={()=><PageMy  refresh={refresh} userToken={props.userToken}/>} options={myoptions}/>
+                </Tab.Navigator>
             </SafeAreaView>
         </>
 
@@ -53,12 +53,8 @@ const styles = StyleSheet.create({
     screen : {
         flexDirection : 'column'
     },
-    title : {
-        flex  :1
-    },
     component : {
-        paddingTop : StatusBar.currentHeight,
-        flex : 8
+        flex : 1
     }
 });
 

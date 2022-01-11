@@ -43,13 +43,15 @@ const styles = StyleSheet.create({
         height : '100%',
         width : '100%',
         flexDirection : 'column',
-        justifyContent : 'flex-start'
+        justifyContent : 'flex-start',
+        
     },
     mypage : {
         flex :1,
         height : '100%',
         width : '100%',
-        backgroundColor : colors.white
+        backgroundColor : colors.white,
+        
     },
     questWrapper : {
         marginTop : 30,

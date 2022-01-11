@@ -14,7 +14,6 @@ const QuestHolder = (props) => {
         setProgress(null);
         if(props.data){
             
-            console.log(props.data._id);
             axios.get("http://192.249.18.141:80/api/quest/progress?questHolder="+props.data._id)
             .then((res)=>{
                 setProgress(res.data);

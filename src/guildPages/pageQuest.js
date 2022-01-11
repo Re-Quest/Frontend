@@ -24,7 +24,8 @@ const PageQuest = (props) => {
             setFilterList(res.data);
             setSelectHolder(res.data[0]);
         });
-    },[props.refresh, apply]);
+        console.log(props.refresh, apply);
+    },[props.refresh,apply]);
 
     const setFilter = (val) =>{
         if(!(typeof(val)==='string') || val.length===0){

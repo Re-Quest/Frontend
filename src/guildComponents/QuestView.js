@@ -56,10 +56,10 @@ const showDate = (data) => {
     */
 
 const QuestView = (props) => {
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(null);
 
     useEffect(()=>{
-        if(!modalVisible)props.setApply(val=>!val);
+        if(modalVisible===false)props.setApply(val=>!val);
     },[modalVisible])
 
     if(props.data){
@@ -168,8 +168,9 @@ const styles = StyleSheet.create({
     },
     buttontxt : {
         fontFamily : 'ReadexPro-Bold',
-        fontSize : 20,
-        color : colors.blue
+        fontSize : 22,
+        color : colors.blue,
+        paddingLeft : 10
     },
     light_title : {
         fontFamily : 'ReadexPro-Regular',

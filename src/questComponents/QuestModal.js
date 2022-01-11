@@ -96,9 +96,6 @@ export const QuestModal= (props)=> {
 		}else{
 			setButtonList((props.questJson.state!=="complete")?normal:complete);
 		}
-		
-
-
 	},[props.data]);
 
 	return (
@@ -111,7 +108,7 @@ export const QuestModal= (props)=> {
 					props.setModalVisible(!props.modalVisible);
 				}}
 			>
-				<TouchableOpacity style={styles.background} onPress={() => props.setModalVisible(false)}/>
+				<TouchableOpacity style={styles.background} onPress={() => props.setModalVisible(null)}/>
 				
 				<View style={styles.modalWrapper}>
 						<ScrollView style={{width : '100%', height : 50}} horizontal={true}>
@@ -248,7 +245,7 @@ export const QuestModal= (props)=> {
 						</View>
 
 						<TouchableOpacity style={{width:"100%", alignItems: "center"}}
-							onPress={modified? () => {apply()} : () => props.setModalVisible(false)}>
+							onPress={modified? () => {apply()} : () => props.setModalVisible(null)}>
 							<Text style={styles.doneText}>
 								{modified? "Apply":"Close"}
 							</Text>
