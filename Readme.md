@@ -16,7 +16,7 @@ Guild 내에서 업무 단위, 또는 이벤트 단위별로 “Quest Holder”�
 
 각 개인이 Quest Holder에 종속된 Quest를 생성하여 다른 User에게 특정 작업을 요청할 수 있습니다.
 
-![](./tab2_default.PNG)
+![](./readmeImgs/tab2_default.PNG)
 
 ![](https://github.com/Re-Quest/Frontend/blob/main/readmeImgs/tab2_select.png)
 
