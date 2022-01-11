@@ -92,7 +92,9 @@ const QuestHolder = (props) => {
             <View style={styles.questWrapper}>
                 <Image style={styles.questImg} source={Images.quest[img]}/>
                 <View style={styles.mainInfo}>
+
                     <Text style={styles.maintxt}>{questname}</Text>
+                    
                     <Text style={{
                         fontFamily : 'ReadexPro-Bold',
                         fontSize : 18,
