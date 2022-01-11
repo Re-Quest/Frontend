@@ -1,4 +1,13 @@
-import {View, Text, StyleSheet, TouchableOpacity, TextInput, StatusBar} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    TextInput,
+    StatusBar,
+    KeyboardAvoidingView,
+    KeyboardAvoidingViewComponent
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import colors from '../../assets/colors/colors';
@@ -31,45 +40,47 @@ const SignUp = (props) =>{
 
 
         return(
-            <View style={styles.signuppage}>
+            <View  style={styles.signuppage}>
+                <KeyboardAvoidingView style={{width: "100%", alignItems:"center", justifyContent:"center"}} behavior={"padding"}>
 
-                <View style={styles.backWrapper}>
-                    <TouchableOpacity style={{alignItems : 'center', justifyContent : 'center'}} onPress={()=>props.navigation.pop()}>
-                        <IconBack style={{alignSelf : 'flex-start'}} fill={colors.blue} width={35} height={35} />
-                    </TouchableOpacity>
-                </View>
-
-
-                <Text style={styles.maintitle}>Create{"\n"}New Account</Text>
-                <Text style={styles.subtitle}>Please fill the all blanks</Text>
-
-
-                <View style={styles.inputContainer}>
-                    <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Id" onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
+                    <View style={styles.backWrapper}>
+                        <TouchableOpacity style={{alignItems : 'center', justifyContent : 'center'}} onPress={()=>props.navigation.pop()}>
+                            <IconBack style={{alignSelf : 'flex-start'}} fill={colors.blue} width={35} height={35} />
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Password" onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
-                    </View>                    
-                    <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Name" onChangeText={(val) => setName(val)} selectionColor={colors.blue}  />
-                    </View>                    
-                    <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Email" onChangeText={(val) => setEmail(val)} selectionColor={colors.blue}  />
-                    </View>                    
-                    <View style={styles.inputWrapper}>
-                        <TextInput style={styles.input} placeholder="Phone" onChangeText={(val) => setPhone(val)} selectionColor={colors.blue}  />
-                    </View>
-                </View>
 
-                
-                <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>next()}>
-                        <Text style={styles.button}>Next</Text>
-                    </TouchableOpacity>
-                </View>
+
+                    <Text style={styles.maintitle}>Create{"\n"}New Account</Text>
+                    <Text style={styles.subtitle}>Please fill the all blanks</Text>
+
+
+                    <View style={styles.inputContainer}>
+                        <View style={styles.inputWrapper}>
+                            <TextInput style={styles.input} placeholder="Id" onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
+                        </View>
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Password" onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
+                      </View>                    
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Name" onChangeText={(val) => setName(val)} selectionColor={colors.blue}  />
+                      </View>                    
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Email" onChangeText={(val) => setEmail(val)} selectionColor={colors.blue}  />
+                      </View>                    
+                      <View style={styles.inputWrapper}>
+                          <TextInput style={styles.input} placeholder="Phone" onChangeText={(val) => setPhone(val)} selectionColor={colors.blue}  />
+                      </View>
+                  </View>
+
+                  <View style={styles.buttonWrapper}>
+                      <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>next()}>
+                          <Text style={styles.button}>Next</Text>
+                      </TouchableOpacity>
+                  </View>
+
+                </KeyboardAvoidingView>
+
             </View>
-
         );
 
 };

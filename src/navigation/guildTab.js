@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import {View, StyleSheet, StatusBar, Platform} from 'react-native';
 import colors from '../../assets/colors/colors';
 import React,{useState, useEffect} from 'react';
 
@@ -12,6 +12,8 @@ import IconNew from '../../assets/icons/icon_new.svg';
 import IconQuest from '../../assets/icons/icon_quest.svg';
 import IconMy from '../../assets/icons/icon_my.svg';
 import QuestNavigator from '../guildPages/questNavigator';
+import {SafeAreaView} from "react-native";
+import {KeyboardAvoidingView} from "react-native";
 
 
 const Tab = createBottomTabNavigator();
@@ -30,12 +32,18 @@ const GuildTab = (props) => {
     const [refresh, setRefresh] = useState(false);
 
     return(
-        <Tab.Navigator style={styles.component} screenOptions={navoptions}>
-            <Tab.Screen name="Home" children={()=><PageHome refresh={refresh} userToken={props.userToken}/>} options={homeoptions}/>
-            <Tab.Screen name="New" children={()=><QuestNavigator refresh={refresh} setRefresh={setRefresh} userToken={props.userToken}/>} options={newoptions}/>
-            <Tab.Screen name="Quest" children={()=><PageQuest refresh={refresh} userToken={props.userToken}/>} options={questoptions}/>
-            <Tab.Screen name="My" children={()=><PageMy  refresh={refresh} userToken={props.userToken}/>} options={myoptions}/>
-        </Tab.Navigator>
+        <>
+            <StatusBar barStyle="white-content"/>
+            <SafeAreaView style={{flex:1, backgroundColor:'white'}}>
+              <Tab.Navigator style={styles.component} screenOptions={navoptions}>
+                  <Tab.Screen name="Home" children={()=><PageHome refresh={refresh} userToken={props.userToken}/>} options={homeoptions}/>
+                  <Tab.Screen name="New" children={()=><QuestNavigator refresh={refresh} setRefresh={setRefresh} userToken={props.userToken}/>} options={newoptions}/>
+                  <Tab.Screen name="Quest" children={()=><PageQuest refresh={refresh} userToken={props.userToken}/>} options={questoptions}/>
+                  <Tab.Screen name="My" children={()=><PageMy  refresh={refresh} userToken={props.userToken}/>} options={myoptions}/>
+              </Tab.Navigator>
+            </SafeAreaView>
+        </>
+
     );
 };
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Platform} from 'react-native';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Platform, KeyboardAvoidingView} from 'react-native';
 import Title from './title';
 import axios from 'axios';
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -35,15 +35,16 @@ const NewQuest = (props) => {
     const [assigned, setAssigned] = useState(null);
     const [title, setTitle] = useState('');
     const [date, setDate] = useState(new Date());
-    const [showDate, setShowDate] = useState(false);
-    const [showTime, setShowTime] = useState(false);
     const [comment, setComment] = useState('');
     const [img, setImg] = useState(0);
 
+    const [showDate, setShowDate] = useState(Platform.OS === "ios");
+    const [showTime, setShowTime] = useState(Platform.OS === "ios");
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        setShowDate(false);
-        setShowTime(false);
+        setShowDate(Platform.OS === "ios");
+        setShowTime(Platform.OS === "ios");
         currentDate.setSeconds(0);
         setDate(currentDate);
     }
@@ -65,141 +66,149 @@ const NewQuest = (props) => {
 
         // create new quest
         axios.post("http://192.249.18.141:80/api/quest/quest",quest)
-        .then((res)=>{
-            console.log("create new quest");
-            props.setRefresh(val=>!val);
-            props.navigation.pop();
-        });
+            .then((res)=>{
+                console.log("create new quest");
+                props.setRefresh(val=>!val);
+                props.navigation.pop();
+            });
     };
 
 
     if(userList){
         return(
-            <View style={styles.box}>
-                <Title pageName="new quest" guildName={guildName} navigation={props.navigation}/>
-                <View style={styles.newpage} >
+            <KeyboardAvoidingView style={{width: "100%"}} behavior={"padding"}>
+                <View style={styles.box}>
 
-                    <View style={{marginVertical :4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconHolder fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>QUEST HOLDER</Text>
-                        </View>
-                        
-                        <View style={styles.normalinput}>
-                            <TextInput  defaultValue={props.holder.title} style={styles.inputdefault} onChangeText={(val) => setTitle(val)} selectionColor={colors.blue}  editable={false}/>
-                        </View>
-                    </View>
+                    <Title pageName="new quest" guildName={guildName} navigation={props.navigation}/>
+                    <View style={styles.newpage} >
 
+                        <View style={{marginVertical :4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconHolder fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>QUEST HOLDER</Text>
+                            </View>
 
-
-                    <View style={{marginVertical :4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconTitle fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>TITLE</Text>
-                        </View>
-                        
-                        <View style={styles.normalinput}>
-                            <TextInput  placeholder='max length 35' style={styles.input} onChangeText={(val) => setTitle(val)} selectionColor={colors.blue}  maxLength={35}/>
-                        </View>
-                    </View>
-
-                    <View style={{marginVertical : 4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconDue fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>DUE DATE</Text>
-                        </View>
-                        <View style={styles.horizontalHolderSpaceBetween}>
-
-                            <TouchableOpacity
-                                style={styles.date}
-                                onPress={() => setShowDate(true)}>
-                                <Text>{date.toLocaleDateString()}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.date}
-                                onPress={() => setShowTime(true)}>
-                                <Text>{date.toLocaleTimeString().substr(0,5)}</Text>
-                            </TouchableOpacity>
-                            <>
-                                {showTime && (
-                                    <DateTimePicker
-                                        style={{height: 30, flex: 1}}
-                                        value={date}
-                                        mode='time'
-                                        is24Hour={true}
-                                        display="default"
-                                        onChange={onChange}
-                                    />
-                                )}
-
-                            </>
-                            <>
-                                {showDate && (
-                                    <DateTimePicker
-                                        style={{height: 30, flex: 1}}
-                                        value={date}
-                                        mode='date'
-                                        is24Hour={true}
-                                        display="default"
-                                        onChange={onChange}
-                                    />
-                                )}
-                            </>
-
-                        </View>
-                    </View>
-
-
-                    <View style={{marginVertical :4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconComment fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>COMMENT</Text>
-                        </View>
-                        
-                        <View style={styles.commentinput}>
-                            <TextInput paddingVertical={15} multiline={true} textAlignVertical='top' placeholder='max length 200' style={styles.input} onChangeText={(val) => setComment(val)} selectionColor={colors.blue}  maxLength={200}/>
-                        </View>
-                    </View>
-
-
-                    <View style={{marginVertical : 4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconAssign fill={colors.blue} width={23} height={23} marginRight={-3}/>
-                            <View style={{flexDirection : 'column'}}>
-                                <Text style={styles.titletxt}>ASSIGN TO</Text>
-                                <Text style={styles.subtxt} >{(assigned===null)?"select one teammate":userList[assigned].userId}</Text>
+                            <View style={styles.normalinput}>
+                                <TextInput  defaultValue={props.holder.title} style={styles.inputdefault} onChangeText={(val) => setTitle(val)} selectionColor={colors.blue}  editable={false}/>
                             </View>
                         </View>
 
-                        <ScrollView style={{width : '100%', height : 120, backgroundColor : colors.cool_white }}>
-                            {userList.map((item,idx)=>{
-                                return(
-                                    <View style={styles.itemWrapper} key={idx}>
-                                        <TouchableOpacity onPress={()=>setAssigned(idx)} style={{width : '100%', height : '100%', flexDirection : 'row', alignItems : 'center', justifyContent : 'space-between'}}>
-                                            <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                                <Image style={styles.itemimg} source={images.profile[item.profileImg]}/>
-                                                <Text style={styles.itemtxt}>{item.userId}</Text>
-                                            </View>
-
-                                            <IconCheck fill={(assigned===idx)?colors.blue:colors.light_gray} style={{width : 14, height : 14, marginHorizontal : 20}} />
-                                        </TouchableOpacity>
-                                    </View>
-                                );
-                            })}
-                        </ScrollView>
 
 
-                    </View>
-                    <View style={{flex:1, flexDirection:'column', justifyContent :'center'}}>
-                        <View style={styles.buttonWrapper}>
-                            <TouchableOpacity disabled={assigned===null} style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>create()}>
-                                <Text style={styles.button}>CREATE</Text>
-                            </TouchableOpacity>
+                        <View style={{marginVertical :4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconTitle fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>TITLE</Text>
+                            </View>
+
+                            <View style={styles.normalinput}>
+                                <TextInput  placeholder='max length 35' style={styles.input} onChangeText={(val) => setTitle(val)} selectionColor={colors.blue}  maxLength={35}/>
+                            </View>
                         </View>
-                    </View>
 
+                        <View style={{marginVertical : 4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconDue fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>DUE DATE</Text>
+                            </View>
+                            <View style={styles.horizontalHolderSpaceBetween}>
+                                <>
+                                    {Platform.OS !== "ios" && (
+                                        <>
+                                            <TouchableOpacity
+                                                style={styles.date}
+                                                onPress={() => setShowDate(true)}>
+                                                <Text>{date.toLocaleDateString()}</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.date}
+                                                onPress={() => setShowTime(true)}>
+                                                <Text>{date.toLocaleTimeString().substr(0,5)}</Text>
+                                            </TouchableOpacity>
+                                        </>
+                                    )}
+                                </>
+
+                                <>
+                                    {showDate && (
+                                        <DateTimePicker
+                                            style={{height: 30, flex: 1}}
+                                            value={date}
+                                            mode='date'
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChange}
+                                        />
+                                    )}
+                                </>
+                                <>
+                                    {showTime && (
+                                        <DateTimePicker
+                                            style={{height: 30, flex: 1}}
+                                            value={date}
+                                            mode='time'
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChange}
+                                        />
+                                    )}
+                                </>
+
+                            </View>
+                        </View>
+
+
+                        <View style={{marginVertical :4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconComment fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>COMMENT</Text>
+                            </View>
+
+                            <View style={styles.commentinput}>
+                                <TextInput paddingVertical={15} multiline={true} textAlignVertical='top' placeholder='max length 200' style={styles.input} onChangeText={(val) => setComment(val)} selectionColor={colors.blue}  maxLength={200}/>
+                            </View>
+                        </View>
+
+
+                        <View style={{marginVertical : 4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconAssign fill={colors.blue} width={23} height={23} marginRight={-3}/>
+                                <View style={{flexDirection : 'column'}}>
+                                    <Text style={styles.titletxt}>ASSIGN TO</Text>
+                                    <Text style={styles.subtxt} >{(assigned===null)?"select one teammate":userList[assigned].userId}</Text>
+                                </View>
+                            </View>
+
+                            <ScrollView style={{width : '100%', height : 120, backgroundColor : colors.cool_white }}>
+                                {userList.map((item,idx)=>{
+                                    return(
+                                        <View style={styles.itemWrapper} key={idx}>
+                                            <TouchableOpacity onPress={()=>setAssigned(idx)} style={{width : '100%', height : '100%', flexDirection : 'row', alignItems : 'center', justifyContent : 'space-between'}}>
+                                                <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                                    <Image style={styles.itemimg} source={images.profile[item.profileImg]}/>
+                                                    <Text style={styles.itemtxt}>{item.userId}</Text>
+                                                </View>
+
+                                                <IconCheck fill={(assigned===idx)?colors.blue:colors.light_gray} style={{width : 14, height : 14, marginHorizontal : 20}} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                })}
+                            </ScrollView>
+
+
+                        </View>
+                        <View style={{flex:1, flexDirection:'column', justifyContent :'center'}}>
+                            <View style={styles.buttonWrapper}>
+                                <TouchableOpacity disabled={assigned===null} style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>create()}>
+                                    <Text style={styles.button}>CREATE</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                    </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         );
     }else{
         return(

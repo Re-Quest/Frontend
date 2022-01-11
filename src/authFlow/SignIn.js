@@ -1,10 +1,21 @@
-import {Text, View, TouchableOpacity, StyleSheet, TextInput, StatusBar, useColorScheme} from 'react-native';
+import {
+    Text,
+    View,
+    TouchableOpacity,
+    StyleSheet,
+    TextInput,
+    StatusBar,
+    useColorScheme,
+    KeyboardAvoidingView
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import colors from '../../assets/colors/colors';
 
 import IconId from '../../assets/icons/icon_id.svg';
 import IconPw from '../../assets/icons/icon_pw.svg';
+import {QuestModal} from "../questComponents/QuestModal";
+
 
 
 const SignIn = (props) => {
@@ -40,34 +51,36 @@ const SignIn = (props) => {
 
     return(
         <View style={styles.signinpage}>
+            <KeyboardAvoidingView style={{width: "100%", alignItems:"center", justifyContent:"center"}} behavior={"padding"}>
 
-            <Text style={styles.maintitle}>Hello,{"\n"}Welcome back!</Text>
-            <Text style={styles.subtitle}>Log back into your account</Text>
+                <Text style={styles.maintitle}>Hello,{"\n"}Welcome back!</Text>
+                <Text style={styles.subtitle}>Log back into your account</Text>
 
 
-            <View style={styles.inputWrapper}>
-                <IconId fill={colors.blue} width={20} height={20} marginLeft={30}/>
-                <TextInput style={styles.input} onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
-            </View>
+                <View style={styles.inputWrapper}>
+                    <IconId fill={colors.blue} width={20} height={20} marginLeft={30}/>
+                    <TextInput style={styles.input} onChangeText={(val) => setID(val)} selectionColor={colors.blue}  />
+                </View>
 
-            <View style={styles.inputWrapper}>
-                <IconPw fill={colors.blue} width={20} height={20} marginLeft={30}/>
-                <TextInput style={styles.input} onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
-            </View>
+                <View style={styles.inputWrapper}>
+                    <IconPw fill={colors.blue} width={20} height={20} marginLeft={30}/>
+                    <TextInput style={styles.input} onChangeText={(val) => setPassWord(val)} secureTextEntry={true} selectionColor={colors.blue} />
+                </View>
 
-            
-            <View style={styles.buttonWrapper}>
-                <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>signin()}>
-                    <Text style={styles.button}>Login</Text>
-                </TouchableOpacity>
-            </View>
 
-            <View stye={styles.signupWrapper}>
-                <TouchableOpacity style={{width : '100%', alignItems : 'center'}} onPress={()=>props.navigation.push('SignUp')}>
-                    <Text style={styles.littletitle}>Don't Have a Account?</Text>
-                    <Text style={styles.midtitle}>SignUp</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={styles.buttonWrapper}>
+                    <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>signin()}>
+                        <Text style={styles.button}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View stye={styles.signupWrapper}>
+                    <TouchableOpacity style={{width : '100%', alignItems : 'center'}} onPress={()=>props.navigation.push('SignUp')}>
+                        <Text style={styles.littletitle}>Don't Have a Account?</Text>
+                        <Text style={styles.midtitle}>SignUp</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </View>
 
     );

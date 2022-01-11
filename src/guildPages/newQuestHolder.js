@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Platform, KeyboardAvoidingView} from 'react-native';
 import Title from './title';
 import axios from 'axios';
 
@@ -36,13 +36,13 @@ const NewQuestHolder = (props) => {
     const [comment, setComment] = useState();
     const [img, setImg] = useState(0);
     const [join, setJoin] = useState([]);
-    const [showDate, setShowDate] = useState(false);
-    const [showTime, setShowTime] = useState(false);
+    const [showDate, setShowDate] = useState(Platform.OS === "ios");
+    const [showTime, setShowTime] = useState(Platform.OS === "ios");
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        setShowDate(false);
-        setShowTime(false);
+        setShowDate(Platform.OS === "ios");
+        setShowTime(Platform.OS === "ios");
         currentDate.setSeconds(0);
         setDate(currentDate);
     }
@@ -69,111 +69,119 @@ const NewQuestHolder = (props) => {
         return(<Text>Loading</Text>);
     }else{
         return(
-            <View style={styles.box}>
-                <Title pageName="new quest holder" guildName={guildName} navigation={props.navigation}/>
-                <View style={styles.newpage} >
+            <KeyboardAvoidingView style={{width: "100%"}} behavior={"position"}>
+                <View style={styles.box}>
+                    <Title pageName="new quest holder" guildName={guildName} navigation={props.navigation}/>
+                    <View style={styles.newpage} >
 
-                    <View style={styles.imageWrapper}>
-                        <View style = {styles.txtWrapper}>
-                            <IconImg fill={colors.blue} width={20} height={20}/>
-                            <View style={{flexDirection : 'column'}}>
-                                <Text style={styles.titletxt}>IMAGE</Text>
-                                <Text style={styles.subtxt}>swipe and click to change</Text>
+                        <View style={styles.imageWrapper}>
+                            <View style = {styles.txtWrapper}>
+                                <IconImg fill={colors.blue} width={20} height={20}/>
+                                <View style={{flexDirection : 'column'}}>
+                                    <Text style={styles.titletxt}>IMAGE</Text>
+                                    <Text style={styles.subtxt}>swipe and click to change</Text>
+                                </View>
+                            </View>
+                            <View style={styles.imgWrapper}>
+                                <Image style={styles.img} source={images.quest[img]}/>
+                            </View>
+
+                            <ScrollView horizontal={true} marginVertical={2}>
+                                {images.quest.map((item,idx)=>{
+                                    return(
+                                        <View style={styles.minimgWrapper} key={idx}>
+                                            <TouchableOpacity onPress={()=>setImg(idx)}>
+                                                <Image style={styles.minimg} source={item} />
+                                            </TouchableOpacity>
+                                        </View>
+                                        );
+                                })}
+                            </ScrollView>
+                        </View>
+
+                        <View style={{marginBottom :4, marginTop : 10}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconTitle fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>TITLE</Text>
+                            </View>
+
+                            <View style={styles.titleinput}>
+                                <TextInput  placeholder='max length 35' style={styles.input} onChangeText={(val) => setTitle(val)} selectionColor={colors.blue}  maxLength={35}/>
                             </View>
                         </View>
-                        <View style={styles.imgWrapper}>
-                            <Image style={styles.img} source={images.quest[img]}/>
-                        </View>
-                        
-                        <ScrollView horizontal={true} marginVertical={2}>
-                            {images.quest.map((item,idx)=>{
-                                return(
-                                    <View style={styles.minimgWrapper} key={idx}>
-                                        <TouchableOpacity onPress={()=>setImg(idx)}>
-                                            <Image style={styles.minimg} source={item} />
-                                        </TouchableOpacity>
-                                    </View>
-                                    );
-                            })}
-                        </ScrollView>
-                    </View>
 
-                    <View style={{marginBottom :4, marginTop : 10}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconTitle fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>TITLE</Text>
-                        </View>
-                        
-                        <View style={styles.titleinput}>
-                            <TextInput  placeholder='max length 35' style={styles.input} onChangeText={(val) => setTitle(val)} selectionColor={colors.blue}  maxLength={35}/>
-                        </View>
-                    </View>
+                        <View style={{marginVertical : 4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconDue fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>DUE DATE</Text>
+                            </View>
+                            <View style={styles.horizontalHolderSpaceBetween}>
+                                <>
+                                    {Platform.OS !== "ios" && (
+                                        <>
+                                            <TouchableOpacity
+                                                style={styles.date}
+                                                onPress={() => setShowDate(true)}>
+                                                <Text>{date.toLocaleDateString()}</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                            style={styles.date}
+                                            onPress={() => setShowTime(true)}>
+                                            <Text>{date.toLocaleTimeString().substr(0,5)}</Text>
+                                            </TouchableOpacity>
+                                        </>
+                                    )}
+                                </>
 
-                    <View style={{marginVertical : 4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconDue fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>DUE DATE</Text>
-                        </View>
-                        <View style={styles.horizontalHolderSpaceBetween}>
+                                <>
+                                    {showDate && (
+                                        <DateTimePicker
+                                            style={{height: 30, flex: 1}}
+                                            value={date}
+                                            mode='date'
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChange}
+                                        />
+                                    )}
+                                </>
+                                <>
+                                    {showTime && (
+                                        <DateTimePicker
+                                            style={{height: 30, flex: 1}}
+                                            value={date}
+                                            mode='time'
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChange}
+                                        />
+                                    )}
 
-                            <TouchableOpacity
-                                style={styles.date}
-                                onPress={() => setShowDate(true)}>
-                                <Text>{date.toLocaleDateString()}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.date}
-                                onPress={() => setShowTime(true)}>
-                                <Text>{date.toLocaleTimeString().substr(0,5)}</Text>
-                            </TouchableOpacity>
-                            <>
-                                {showTime && (
-                                    <DateTimePicker
-                                        style={{height: 30, flex: 1}}
-                                        value={date}
-                                        mode='time'
-                                        is24Hour={true}
-                                        display="default"
-                                        onChange={onChange}
-                                    />
-                                )}
+                                </>
 
-                            </>
-                            <>
-                                {showDate && (
-                                    <DateTimePicker
-                                        style={{height: 30, flex: 1}}
-                                        value={date}
-                                        mode='date'
-                                        is24Hour={true}
-                                        display="default"
-                                        onChange={onChange}
-                                    />
-                                )}
-                            </>
+                            </View>
+                        </View>
 
-                        </View>
-                    </View>
+                        <View style={{marginVertical :4}}>
+                            <View style = {styles.txtWrapper}>
+                                <IconComment fill={colors.blue} width={20} height={20}/>
+                                <Text style={styles.titletxt}>COMMENT</Text>
+                            </View>
 
-                    <View style={{marginVertical :4}}>
-                        <View style = {styles.txtWrapper}>
-                            <IconComment fill={colors.blue} width={20} height={20}/>
-                            <Text style={styles.titletxt}>COMMENT</Text>
+                            <View style={styles.commentinput}>
+                                <TextInput paddingVertical={15} multiline={true} textAlignVertical='top' placeholder='max length 200' style={styles.input} onChangeText={(val) => setComment(val)} selectionColor={colors.blue}  maxLength={200}/>
+                            </View>
                         </View>
-                        
-                        <View style={styles.commentinput}>
-                            <TextInput paddingVertical={15} multiline={true} textAlignVertical='top' placeholder='max length 200' style={styles.input} onChangeText={(val) => setComment(val)} selectionColor={colors.blue}  maxLength={200}/>
-                        </View>
-                    </View>
-                    <View style={{flex:1, flexDirection:'column', justifyContent :'center'}}>
-                        <View style={styles.buttonWrapper}>
-                            <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>create()}>
-                                <Text style={styles.button}>CREATE</Text>
-                            </TouchableOpacity>
+                        <View style={{flex:1, flexDirection:'column', justifyContent :'center'}}>
+                            <View style={styles.buttonWrapper}>
+                                <TouchableOpacity style={{width : '100%', height : '100%', alignItems : 'center', justifyContent : 'center'}} onPress={()=>create()}>
+                                    <Text style={styles.button}>CREATE</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
 
         );
     }
