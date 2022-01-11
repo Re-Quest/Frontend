@@ -23,7 +23,7 @@ const GuildProfile = () =>{
                     
                     <View style={styles.textWrapper}>
                         <Text style={styles.maintxt}>CLASS-1</Text>
-                        <Text style={styles.maintxt}>TEAM RE:QUEST</Text>
+                        <Text style={styles.bluetxt}>TEAM RE:QUEST</Text>
     
                         
                         <View style={styles.subtxtWrapper}>
@@ -120,7 +120,14 @@ const styles = StyleSheet.create({
         alignSelf :'flex-start',
         marginLeft : 10,
         marginTop : 10,
-
+    },
+    bluetxt : {
+        fontSize : 20,
+        fontFamily : 'ReadexPro-Bold',
+        color : colors.blue,
+        alignSelf :'flex-start',
+        marginLeft : 10,
+        marginTop : 10,
     },
     textWrapper : {
         width : '100%'
