@@ -48,7 +48,7 @@ const MyProfile = (props) =>{
             </View>
         );
     }else{
-        return(<Text>Loading...</Text>);
+        return(<Text></Text>);
     }
 
 };

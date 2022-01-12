@@ -212,7 +212,7 @@ const NewQuest = (props) => {
         );
     }else{
         return(
-            <Text>loading</Text>
+            <Text></Text>
         );
     }
 

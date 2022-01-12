@@ -66,7 +66,7 @@ const NewQuestHolder = (props) => {
 
 
     if(userList===null){
-        return(<Text>Loading</Text>);
+        return(<Text></Text>);
     }else{
         return(
             <KeyboardAvoidingView style={{width: "100%"}} behavior={"position"}>
