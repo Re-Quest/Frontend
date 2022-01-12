@@ -43,22 +43,25 @@ const pageHome = (props) => {
         return(
             <View style={styles.box}>
                 <Title pageName="home" guildName={guildName}/>
-                <View style={styles.homepage}>
-                    <GuildProfile />
+                <ScrollView style={styles.scrollview}>
+                    <View style={styles.homepage}>
+                        <GuildProfile />
 
-                    <View style={styles.holderWrapper}>
-                        <Text style={styles.titletxt}>TEAMMATES</Text>
-                        <View style={styles.search}>
-                            <IconSearch style={{width : 20, height : 20}} fill={colors.blue} />
-                            <TextInput style={styles.search} placeholder="find your teammates" onChangeText={(val) => setFilter(val.toLowerCase())} selectionColor={colors.blue}/>
+                        <View style={styles.holderWrapper}>
+                            <Text style={styles.titletxt}>TEAMMATES</Text>
+                            <View style={styles.search}>
+                                <IconSearch style={{width : 20, height : 20}} fill={colors.blue} />
+                                <TextInput style={styles.search} placeholder="find your teammates" onChangeText={(val) => setFilter(val.toLowerCase())} selectionColor={colors.blue}/>
+                            </View>
+                            <ScrollView style={styles.scroll} horizontal={true} overScrollMode='never'>
+                                {filterList.map((item,idx)=>{
+                                    return(<CardProfile data={item} key={idx} />);
+                                })}
+                            </ScrollView>
                         </View>
-                        <ScrollView style={styles.scroll} horizontal={true} overScrollMode='never'>
-                            {filterList.map((item,idx)=>{
-                                return(<CardProfile data={item} key={idx} />);
-                            })}           
-                        </ScrollView>
                     </View>
-                </View>
+                </ScrollView>
+
             </View>
     
         );
@@ -76,12 +79,15 @@ const styles = StyleSheet.create({
         width : '100%',
         backgroundColor : colors.white,
     },
+    scrollview : {
+        width: '100%'
+    },
     homepage : {
         flex : 1,
-        width : '90%',
+        width : '96%',
         height : '100%',
         paddingTop : '3%',
-        marginHorizontal : '5%',
+        marginHorizontal : '2%',
 
         alignItems : 'center'
     },
